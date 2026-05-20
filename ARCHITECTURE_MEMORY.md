@@ -15,6 +15,10 @@ L'architecture de **Pharmaxy** repose sur des contraintes critiques liées au do
 4. **Spécificités Camerounaises :** 
    - Intégration du numéro d'agrément **MINSANTE** dans la table Pharmacie.
    - Utilisation de types **INTEGER** pour la monnaie (FCFA). En effet, le FCFA n'utilisant pas de centimes en pratique, l'utilisation d'entiers évite les approximations et les dérives de calculs de nombres à virgule flottante (`REAL`).
+5. **Charte Graphique Officielle (UI Moderne) :**
+   - **Bleu Néon (`#67dcff`)** : Accents lumineux, focus, états actifs secondaires et surbrillances.
+   - **Bleu Intermédiaire (`#587dff`)** : Teinte principale de marque, gradients d'interaction et boutons.
+   - **Bleu Profond (`#2720ff`)** : Couleur de structure principale, boutons d'action primaire et éléments à fort contraste.
 
 ---
 
