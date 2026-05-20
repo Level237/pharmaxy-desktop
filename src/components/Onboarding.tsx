@@ -461,10 +461,10 @@ export default function Onboarding() {
             <button
               onClick={handleFinalSubmit}
               disabled={isSubmitting}
-              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#587dff] to-[#2720ff] hover:opacity-95 cursor-pointer hover:shadow-lg hover:shadow-[#587dff]/25 active:scale-[0.98] text-white font-extrabold py-3.5 px-6 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="flex-1 flex items-center justify-center gap-2 bg-[#2720ff] hover:opacity-95 cursor-pointer hover:shadow-lg hover:shadow-[#587dff]/25 active:scale-[0.98] text-white font-extrabold py-3.5 px-6 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               {isSubmitting ? "Initialisation de la caisse..." : "Finaliser l'installation"}
-              <CheckCircle className="h-5 w-5" />
+
             </button>
           )}
         </div>
