@@ -1,11 +1,11 @@
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Package, 
-  Truck, 
-  CreditCard, 
-  BarChart3, 
-  Plus 
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  Package,
+  Truck,
+  CreditCard,
+  BarChart3,
+  Plus
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
@@ -39,11 +39,10 @@ export function Sidebar() {
             <button
               key={i}
               onClick={() => navigate(item.path)}
-              className={`w-full flex items-center cursor-pointer gap-3 px-4 py-3 rounded-xl transition-all ${
-                isActive
-                  ? "bg-[#10B981] text-white shadow-lg shadow-emerald-500/20 font-bold"
-                  : "text-[#475569] hover:bg-[#DDE9F5]"
-              }`}
+              className={`w-full flex items-center cursor-pointer gap-3 px-4 py-3 rounded-xl transition-all ${isActive
+                ? "bg-[#587dff] text-white shadow-lg  font-bold"
+                : "text-[#475569] "
+                }`}
             >
               <item.icon className={`h-5 w-5 ${isActive ? "text-white" : "text-[#64748B]"}`} />
               <span className="text-sm">{item.label}</span>
@@ -52,9 +51,9 @@ export function Sidebar() {
         })}
       </nav>
 
-      <button 
+      <button
         onClick={() => navigate("/pos")}
-        className="mt-auto w-full bg-[#10B981] hover:bg-[#059669] text-white flex items-center justify-center gap-2 py-4 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/10"
+        className="mt-auto w-full bg-[#587dff] hover:bg-[#059669] text-white flex items-center justify-center gap-2 py-4 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/10"
       >
         <Plus className="h-5 w-5" />
         <span>New Sale</span>
