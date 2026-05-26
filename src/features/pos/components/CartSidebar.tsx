@@ -18,8 +18,8 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
   const receivedNum = parseFloat(amountReceived) || 0;
   const change = Math.max(0, receivedNum - totalAmount);
 
-  const [state, action, isPending] = useActionState(
-    async (_prev: unknown, formData: FormData) => {
+  const [_, action, isPending] = useActionState(
+    async (_prev: unknown) => {
       const payload: SalePayload = {
         items,
         totalAmount,

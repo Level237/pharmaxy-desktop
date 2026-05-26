@@ -7,8 +7,6 @@ import { fetchProducts } from "./actions/posActions";
 import { useCart } from "./hooks/useCart";
 import type { Product } from "./types";
 
-const productsPromise = fetchProducts();
-
 function PosContent({ productsPromise }: { productsPromise: Promise<Product[]> }) {
   const products = use(productsPromise);
   const { items, addToCart, updateQuantity, totalAmount, totalItems } = useCart();
@@ -90,6 +88,10 @@ function PosContent({ productsPromise }: { productsPromise: Promise<Product[]> }
 }
 
 export function PosPage() {
+  // On crée la promise ici pour qu'elle ne soit lancée que quand le composant est monté
+  // et donc après que GlobalGuard ait initialisé la base de données.
+  const [productsPromise] = useState(() => fetchProducts());
+
   return (
     <Layout>
       <Suspense fallback={<div className="flex items-center justify-center h-full text-[#64748B]">Chargement du catalogue...</div>}>
