@@ -2,10 +2,13 @@
 import { useEffect, useState } from "react";
 import { HashRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Onboarding from "./components/Onboarding";
-import PinLogin from "./components/PinLogin";
-import Dashboard from "./components/Dashboard";
+
+import { DashboardPage } from "./features/dashboard";
+import { PosPage } from "./features/pos";
 import { checkIfRegistered } from "./db/pharmacyQueries";
+
 import { initializeAppDatabase } from "./db/initializeDatabase";
+import PinLogin from "./components/PinLogin";
 
 // 1. Gardien de démarrage (Vérification et initialisation SQLite)
 function StartupGuard() {
@@ -17,7 +20,7 @@ function StartupGuard() {
       try {
         // Vérifier si la pharmacie est déjà enregistrée localement dans SQLite
         const isRegistered = await checkIfRegistered();
-        
+
         if (isRegistered) {
           // Si enregistrée, on redirige vers l'écran du code PIN gérant/caissier
           navigate("/login", { replace: true });
@@ -25,7 +28,7 @@ function StartupGuard() {
           // Si non enregistrée, on crée toutes les tables SQLite et index requis
           setStatus("Configuration de la base SQLite locale...");
           await initializeAppDatabase();
-          
+
           // Puis on redirige vers l'onboarding de présentation
           setTimeout(() => {
             navigate("/onboarding", { replace: true });
@@ -36,19 +39,19 @@ function StartupGuard() {
         setStatus("Erreur lors de l'accès à la base de données locale SQLite.");
       }
     }
-    
+
     checkSystem();
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-[#060814] flex flex-col items-center justify-center text-white font-sans relative overflow-hidden">
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-[#2720ff]/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-[#67dcff]/5 blur-[120px] pointer-events-none" />
+    <div className="min-h-[100dvh] bg-slate-50 flex flex-col items-center justify-center text-slate-900 font-sans relative overflow-hidden">
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center">
-        <div className="h-12 w-12 border-4 border-t-transparent border-r-[#67dcff] border-b-[#587dff] border-l-[#2720ff] rounded-full animate-spin mb-4 shadow-[0_0_15px_rgba(103,220,255,0.2)]" />
-        <h1 className="text-xl font-bold tracking-wider bg-gradient-to-r from-[#67dcff] via-[#587dff] to-[#2720ff] bg-clip-text text-transparent uppercase mb-2">PHARMAXY</h1>
-        <p className="text-gray-400 text-xs font-medium tracking-wide">{status}</p>
+        <div className="h-12 w-12 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-6" />
+        <h1 className="text-2xl font-black tracking-tighter text-slate-900 uppercase mb-2">PHARMAXY</h1>
+        <p className="text-slate-500 text-sm font-medium tracking-tight">{status}</p>
       </div>
     </div>
   );
@@ -62,7 +65,8 @@ function App() {
         <Route path="/" element={<StartupGuard />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/login" element={<PinLogin />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/pos" element={<PosPage />} />
       </Routes>
     </HashRouter>
   );

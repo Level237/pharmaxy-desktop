@@ -188,5 +188,40 @@ export const initializeAppDatabase = async () => {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sale_lines_sale ON sale_lines(sale_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_client ON sales(client_id);`);
 
+    // 4. Insertion des données de test (Mock Data)
+    const checkProducts = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM products");
+    if (checkProducts[0].count === 0) {
+        const mockProducts = [
+            { name: "Amoxicilline 500mg", dci: "Amoxicilline", form: "Gélule", dosage: "500mg", packaging: "Boîte de 12", barcode: "3400930000018", price: 1500, min: 10, cat: "Antibiotique" },
+            { name: "Paracétamol 1g", dci: "Paracétamol", form: "Comprimé", dosage: "1g", packaging: "Boîte de 8", barcode: "3400930000025", price: 500, min: 20, cat: "Analgésique" },
+            { name: "Ibuprofène 400mg", dci: "Ibuprofène", form: "Comprimé", dosage: "400mg", packaging: "Boîte de 10", barcode: "3400930000032", price: 1200, min: 15, cat: "Anti-inflammatoire" },
+            { name: "Doliprane 1000mg", dci: "Paracétamol", form: "Comprimé", dosage: "1000mg", packaging: "Boîte de 8", barcode: "3400930000049", price: 800, min: 20, cat: "Analgésique" },
+            { name: "Augmentin 1g", dci: "Amoxicilline/Acide clavulanique", form: "Sachet", dosage: "1g/125mg", packaging: "Boîte de 12", barcode: "3400930000056", price: 4500, min: 5, cat: "Antibiotique" },
+            { name: "Spasfon", dci: "Phloroglucinol", form: "Comprimé", dosage: "80mg", packaging: "Boîte de 30", barcode: "3400930000063", price: 2500, min: 10, cat: "Antispasmodique" },
+            { name: "Gaviscon", dci: "Sodium alginate", form: "Suspension buvable", dosage: "250ml", packaging: "Flacon", barcode: "3400930000070", price: 3000, min: 5, cat: "Anti-acide" },
+            { name: "Ventoline", dci: "Salbutamol", form: "Inhalateur", dosage: "100µg", packaging: "200 doses", barcode: "3400930000087", price: 3500, min: 5, cat: "Bronchodilatateur" },
+            { name: "Aerius 5mg", dci: "Desloratadine", form: "Comprimé", dosage: "5mg", packaging: "Boîte de 30", barcode: "3400930000094", price: 4000, min: 10, cat: "Antihistaminique" },
+            { name: "Inexium 40mg", dci: "Esoméprazole", form: "Comprimé", dosage: "40mg", packaging: "Boîte de 28", barcode: "3400930000100", price: 6500, min: 5, cat: "Inhibiteur de la pompe à protons" },
+            { name: "Dafalgan Codéine", dci: "Paracétamol/Codéine", form: "Comprimé", dosage: "500mg/30mg", packaging: "Boîte de 16", barcode: "3400930000117", price: 1800, min: 10, cat: "Analgésique" },
+            { name: "Voltarène 50mg", dci: "Diclofénac", form: "Comprimé", dosage: "50mg", packaging: "Boîte de 30", barcode: "3400930000124", price: 2200, min: 10, cat: "Anti-inflammatoire" },
+            { name: "Clamoxyl 500mg", dci: "Amoxicilline", form: "Gélule", dosage: "500mg", packaging: "Boîte de 12", barcode: "3400930000131", price: 1600, min: 10, cat: "Antibiotique" },
+            { name: "Zyrtec 10mg", dci: "Cétirizine", form: "Comprimé", dosage: "10mg", packaging: "Boîte de 15", barcode: "3400930000148", price: 2000, min: 10, cat: "Antihistaminique" },
+            { name: "Maalox", dci: "Hydroxyde d'aluminium/magnésium", form: "Comprimé", dosage: "400mg/400mg", packaging: "Boîte de 40", barcode: "3400930000155", price: 2800, min: 10, cat: "Anti-acide" },
+            { name: "Smecta", dci: "Diosmectite", form: "Poudre", dosage: "3g", packaging: "Boîte de 30", barcode: "3400930000162", price: 3200, min: 10, cat: "Antidiarrhéique" },
+            { name: "Bétadine dermique", dci: "Povidone iodée", form: "Solution", dosage: "10%", packaging: "Flacon 125ml", barcode: "3400930000179", price: 2500, min: 5, cat: "Antiseptique" },
+            { name: "Biafine", dci: "Trolamine", form: "Emulsion", dosage: "Tube 93g", packaging: "Tube", barcode: "3400930000186", price: 3800, min: 5, cat: "Protecteur cutané" },
+            { name: "Mopral 20mg", dci: "Oméprazole", form: "Gélule", dosage: "20mg", packaging: "Boîte de 14", barcode: "3400930000193", price: 4200, min: 5, cat: "Inhibiteur de la pompe à protons" },
+            { name: "Lasilix 40mg", dci: "Furosémide", form: "Comprimé", dosage: "40mg", packaging: "Boîte de 30", barcode: "3400930000209", price: 1500, min: 10, cat: "Diurétique" }
+        ];
+
+        for (const p of mockProducts) {
+            await db.execute(`
+                INSERT INTO products (uuid, name, dci, form, dosage, packaging, barcode, selling_price, min_stock_alert, category)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            `, [crypto.randomUUID(), p.name, p.dci, p.form, p.dosage, p.packaging, p.barcode, p.price, p.min, p.cat]);
+        }
+        console.log("20 médicaments de test insérés avec succès.");
+    }
+
     console.log("Base de données PHARMAXY et ses index initialisés avec succès.");
 };
