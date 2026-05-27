@@ -145,7 +145,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
           <button
             type="submit"
             disabled={isPending || items.length === 0}
-            className="w-full bg-[#587dff] hover:bg-[#064E3B] text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-900/10 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full bg-[#587dff] hover:bg-[#587dff] text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-900/10 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
           >
             {isPending ? "Traitement..." : (
               <>

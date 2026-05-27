@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldAlert, Wifi, UserCheck, Delete } from "lucide-react";
 import { getPharmacyInfo } from "../db/pharmacyQueries";
 import { verifyUserPin } from "../db/userQueries";
-import logo2 from "../assets/logo-2.png";
+import logo2 from "../assets/logo.png";
 
 export default function PinLogin() {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ export default function PinLogin() {
     setError("");
     try {
       const user = await verifyUserPin(enteredPin);
-      
+
       if (user) {
         sessionStorage.setItem("currentUser", JSON.stringify(user));
         setTimeout(() => {
@@ -86,14 +86,14 @@ export default function PinLogin() {
       <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-500/[0.02] blur-[100px] pointer-events-none" />
 
       <div className="relative w-full max-w-[400px] flex flex-col items-center">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center mb-10"
         >
-          <img src={logo2} alt="Logo" className="h-14 object-contain" />
+          <img src={logo2} alt="Logo" className="h-44 object-contain" />
           <h2 className="text-slate-900 font-black mt-4 text-2xl tracking-tighter uppercase">
             {pharmacyName}
           </h2>
@@ -104,10 +104,10 @@ export default function PinLogin() {
         </motion.div>
 
         {/* PIN Pad Container - Liquid Glass */}
-        <motion.div 
+        <motion.div
           animate={shake ? { x: [-10, 10, -10, 10, 0] } : {}}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          className="w-full bg-white rounded-[2.5rem] p-8 diffusion-shadow border border-slate-200/50 flex flex-col items-center relative z-10"
+          className="w-full bg-white rounded-[2.5rem] p-8 diffusion-shadow border border-slate-400/50 flex flex-col items-center relative z-10"
         >
           <span className="text-slate-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-6">
             Saisir le Code PIN Caisse
@@ -116,8 +116,8 @@ export default function PinLogin() {
           {/* Indicators */}
           <div className="flex gap-5 mb-8">
             {[0, 1, 2, 3].map((index) => (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 initial={false}
                 animate={{
                   scale: index < pin.length ? 1.2 : 1,
@@ -132,7 +132,7 @@ export default function PinLogin() {
           {/* Error Message */}
           <AnimatePresence>
             {error && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
@@ -151,7 +151,7 @@ export default function PinLogin() {
                 key={num}
                 onClick={() => handleKeyPress(num)}
                 disabled={isLoading}
-                className="h-16 bg-slate-50 hover:bg-slate-100 active:scale-95 border border-slate-200/50 text-slate-900 font-bold text-xl rounded-2xl transition-all flex items-center justify-center cursor-pointer disabled:opacity-50"
+                className="h-16 bg-slate-100 hover:bg-slate-200 active:scale-95 border border-slate-200 text-slate-900 font-bold text-xl rounded-2xl transition-all flex items-center justify-center cursor-pointer disabled:opacity-50"
               >
                 {num}
               </button>
@@ -160,7 +160,7 @@ export default function PinLogin() {
             <button
               onClick={handleClear}
               disabled={isLoading || pin.length === 0}
-              className="h-16 bg-white hover:bg-red-50 active:scale-95 border border-slate-200/50 text-slate-400 hover:text-red-600 text-xs font-bold uppercase tracking-wider rounded-2xl transition-all flex items-center justify-center cursor-pointer disabled:opacity-50"
+              className="h-16 bg-white hover:bg-red-100 active:scale-95 border border-slate-200/50 text-slate-400 hover:text-red-600 text-xs font-bold uppercase tracking-wider rounded-2xl transition-all flex items-center justify-center cursor-pointer disabled:opacity-50"
             >
               Effacer
             </button>
@@ -168,7 +168,7 @@ export default function PinLogin() {
             <button
               onClick={() => handleKeyPress("0")}
               disabled={isLoading}
-              className="h-16 bg-slate-50 hover:bg-slate-100 active:scale-95 border border-slate-200/50 text-slate-900 font-bold text-xl rounded-2xl transition-all flex items-center justify-center cursor-pointer"
+              className="h-16 bg-slate-100 hover:bg-slate-200 active:scale-95 border border-slate-200/50 text-slate-900 font-bold text-xl rounded-2xl transition-all flex items-center justify-center cursor-pointer"
             >
               0
             </button>
@@ -184,7 +184,7 @@ export default function PinLogin() {
         </motion.div>
 
         {/* Footer */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}

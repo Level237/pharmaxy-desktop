@@ -14,7 +14,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: ShoppingBag, label: "Point of Sale", path: "/pos" },
   { icon: Package, label: "Stock", path: "/stock" },
-  { icon: Truck, label: "Suppliers", path: "/suppliers" },
+  { icon: Truck, label: "Livraisons", path: "/deliveries" },
   { icon: CreditCard, label: "Credits", path: "/credits" },
   { icon: BarChart3, label: "Reports", path: "/reports" },
 ];

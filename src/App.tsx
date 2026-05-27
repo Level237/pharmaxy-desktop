@@ -5,6 +5,7 @@ import { Onboarding } from "./features/onboarding";
 
 import { DashboardPage } from "./features/dashboard";
 import { PosPage } from "./features/pos";
+import { DeliveriesPage } from "./features/deliveries";
 import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
@@ -73,6 +74,7 @@ function App() {
           <Route path="/login" element={<PinLogin />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/pos" element={<PosPage />} />
+          <Route path="/deliveries" element={<DeliveriesPage />} />
         </Routes>
       </GlobalGuard>
     </HashRouter>
