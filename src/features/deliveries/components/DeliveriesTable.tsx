@@ -12,7 +12,7 @@ export function DeliveriesTable({ deliveries }: { deliveries: Delivery[] }) {
   return (
     <div className="bg-white rounded-[32px] border border-[#E2E8F0] overflow-hidden shadow-sm flex flex-col h-full">
       <div className="p-8 flex items-center justify-between">
-        <h3 className="text-xl font-black text-[#0F172A]">Annuaire des Livraisons</h3>
+        <h3 className="text-xl font-bold text-[#0F172A]">Annuaire des Livraisons</h3>
         <div className="flex items-center gap-3">
           <button className="p-2.5 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] transition-all">
             <Filter className="h-5 w-5 text-[#64748B]" />
@@ -49,7 +49,7 @@ export function DeliveriesTable({ deliveries }: { deliveries: Delivery[] }) {
                   <span className="text-sm text-[#475569]">{delivery.supplierType}</span>
                 </td>
                 <td className="px-8 py-6">
-                  <div className="h-8 w-12 bg-[#F1F5F9] rounded-full flex items-center justify-center text-xs font-black text-[#475569]">
+                  <div className="h-8 w-12 bg-[#F1F5F9] rounded-full flex items-center justify-center text-xs font-bold text-[#475569]">
                     {delivery.itemsCount}
                   </div>
                 </td>

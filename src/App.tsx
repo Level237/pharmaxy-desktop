@@ -53,8 +53,8 @@ function GlobalGuard({ children }: { children: React.ReactNode }) {
 
         <div className="relative z-10 flex flex-col items-center">
           <div className="h-12 w-12 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-6" />
-          <h1 className="text-2xl font-black tracking-tighter text-slate-900 uppercase mb-2">PHARMAXY</h1>
-          <p className="text-slate-500 text-sm font-medium tracking-tight">{status}</p>
+          <h1 className="text-2xl font-bold  text-slate-900 uppercase mb-2">PHARMAXY</h1>
+          <p className="text-slate-500 text-sm font-medium ">{status}</p>
         </div>
       </div>
     );

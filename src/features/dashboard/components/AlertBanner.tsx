@@ -7,7 +7,7 @@ export function AlertBanner() {
         <AlertTriangle className="h-7 w-7" />
       </div>
       <div className="flex-1">
-        <h4 className="text-[#991B1B] font-black text-lg">Alerte Stock : Météo des Stocks</h4>
+        <h4 className="text-[#991B1B] font-bold text-lg">Alerte Stock : Météo des Stocks</h4>
         <p className="text-[#B91C1C] text-sm opacity-90 mt-0.5">
           3 produits sont sous le seuil minimum (Amoxicilline, Paracétamol, etc.). Passez commande immédiatement pour éviter les ruptures.
         </p>

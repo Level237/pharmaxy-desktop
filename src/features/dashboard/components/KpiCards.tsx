@@ -14,7 +14,7 @@ export function KpiCards({ stats }: { stats: DashboardStats }) {
           </span>
         </div>
         <p className="text-[#64748B] text-[11px] font-bold uppercase tracking-wider">CA Aujourd'hui</p>
-        <h3 className="text-3xl font-black text-[#0F172A] mt-1">{stats.todayRevenue}</h3>
+        <h3 className="text-3xl font-bold text-[#0F172A] mt-1">{stats.todayRevenue}</h3>
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] group hover:border-[#3B82F6] transition-all cursor-pointer">
@@ -25,7 +25,7 @@ export function KpiCards({ stats }: { stats: DashboardStats }) {
           <span className="text-[#64748B] text-[10px] font-bold uppercase">Total du jour</span>
         </div>
         <p className="text-[#64748B] text-[11px] font-bold uppercase tracking-wider">Clients servis</p>
-        <h3 className="text-3xl font-black text-[#0F172A] mt-1">{stats.clientsServed}</h3>
+        <h3 className="text-3xl font-bold text-[#0F172A] mt-1">{stats.clientsServed}</h3>
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] group hover:border-[#D97706] transition-all cursor-pointer">
@@ -38,7 +38,7 @@ export function KpiCards({ stats }: { stats: DashboardStats }) {
           </span>
         </div>
         <p className="text-[#64748B] text-[11px] font-bold uppercase tracking-wider">Crédits accordés</p>
-        <h3 className="text-3xl font-black text-[#0F172A] mt-1">{stats.creditsGranted}</h3>
+        <h3 className="text-3xl font-bold text-[#0F172A] mt-1">{stats.creditsGranted}</h3>
       </div>
     </div>
   );

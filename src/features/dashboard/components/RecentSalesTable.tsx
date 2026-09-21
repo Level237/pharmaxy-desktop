@@ -27,7 +27,7 @@ export function RecentSalesTable({ sales }: { sales: Sale[] }) {
               <td className="px-4 py-5 text-sm font-bold text-[#0F172A]">{sale.amount}</td>
               <td className="px-4 py-5 text-sm text-[#64748B]">{sale.time}</td>
               <td className="px-6 py-5">
-                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${sale.status === "Payé"
+                <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${sale.status === "Payé"
                     ? "bg-[#ECFDF5] text-[#059669]"
                     : "bg-[#FFF7ED] text-[#D97706]"
                   }`}>

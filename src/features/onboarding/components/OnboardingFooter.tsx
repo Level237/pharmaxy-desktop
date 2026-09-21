@@ -3,7 +3,7 @@ export function OnboardingFooter() {
   
   return (
     <footer className="w-full py-8 px-12 flex flex-col md:flex-row justify-between items-center bg-white border-t border-slate-100 text-[13px] font-medium text-slate-500">
-      <div className="text-emerald-600 font-black mb-4 md:mb-0">
+      <div className="text-emerald-600 font-bold mb-4 md:mb-0">
         Pharmaxy
       </div>
       

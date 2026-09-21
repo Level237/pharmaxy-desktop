@@ -76,7 +76,7 @@ export function OnboardingPage() {
 
   return (
     <OnboardingLayout>
-      <div className="pt-10">
+      <div className="w-full">
         <ProgressBar currentStep={currentStep} totalSteps={3} />
         
         <AnimatePresence mode="wait">
@@ -85,7 +85,7 @@ export function OnboardingPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="mx-8 mb-4 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-xs font-bold text-center"
+              className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-xs font-bold text-center"
             >
               {error}
             </motion.div>

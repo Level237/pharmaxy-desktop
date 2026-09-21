@@ -1,15 +1,21 @@
-import { getDatabase } from "../../../db/database";
+import { getAllProducts } from "../../../db/productQueries";
 import type { Product, SalePayload } from "../types";
 
 export async function fetchProducts(): Promise<Product[]> {
-  const db = await getDatabase();
-  // On récupère les produits et on simule/calcule un stock pour le mock
-  // Dans une vraie app, on ferait une jointure avec la table 'lots'
-  const products = await db.select<Product[]>("SELECT * FROM products ORDER BY name ASC");
-  
+  const products = await getAllProducts();
   return products.map(p => ({
-    ...p,
-    stock_quantity: Math.floor(Math.random() * 50) + 1 // Mock stock pour l'instant
+    id: p.id,
+    uuid: p.uuid,
+    name: p.name,
+    dci: p.dci || "",
+    form: p.form || "",
+    dosage: p.dosage || "",
+    packaging: p.packaging || "",
+    barcode: p.barcode || "",
+    selling_price: p.selling_price,
+    min_stock_alert: p.min_stock_alert,
+    category: p.category || "Tous",
+    stock_quantity: p.total_stock
   }));
 }
 

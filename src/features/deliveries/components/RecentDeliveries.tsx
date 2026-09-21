@@ -7,7 +7,7 @@ export function RecentDeliveries({ deliveries }: { deliveries: Delivery[] }) {
   return (
     <div className="bg-white p-8 rounded-[32px] border border-[#E2E8F0] shadow-sm flex flex-col max-h-[500px]">
       <div className="flex items-center justify-between mb-8">
-        <h3 className="text-xl font-black text-[#0F172A]">Livraisons Récentes</h3>
+        <h3 className="text-xl font-bold text-[#0F172A]">Livraisons Récentes</h3>
         <History className="h-5 w-5 text-[#64748B]" />
       </div>
 
@@ -26,7 +26,7 @@ export function RecentDeliveries({ deliveries }: { deliveries: Delivery[] }) {
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-[#64748B] mb-1">{delivery.date.split(',')[1] || delivery.date}</p>
-              <span className={`text-[9px] font-black px-2 py-0.5 rounded-md ${delivery.status === 'REÇU' ? 'bg-[#ECFDF5] text-[#3B82F6]' :
+              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md ${delivery.status === 'REÇU' ? 'bg-[#ECFDF5] text-[#3B82F6]' :
                 delivery.status === 'EN TRANSIT' ? 'bg-[#FFF7ED] text-[#D97706]' :
                   'bg-[#3B82F6] text-white'
                 }`}>

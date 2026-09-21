@@ -49,7 +49,7 @@ function PosContent({ productsPromise }: { productsPromise: Promise<Product[]> }
           >
             <ShoppingBag className="h-6 w-6 text-[#64748B] group-hover:text-[#10B981]" />
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#587dff] text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">
+              <span className="absolute -top-2 -right-2 bg-[#587dff] text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">
                 {totalItems}
               </span>
             )}

@@ -10,17 +10,17 @@ interface StepPharmacyInfoProps {
 
 export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmacyInfoProps) {
   return (
-    <div className="flex flex-col p-8 md:p-12">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Identité de l'Officine</h1>
-        <p className="text-slate-500 font-medium max-w-sm mx-auto">
+    <div className="flex flex-col">
+      <div className="mb-10 text-left">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2 ">Identité de l'Officine</h1>
+        <p className="text-slate-500 font-medium text-lg max-w-sm">
           Ces informations apparaîtront sur vos tickets de caisse et rapports officiels.
         </p>
       </div>
 
       <div className="space-y-6 mb-12">
         <div className="group">
-          <label className="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 ml-1">
+          <label className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">
             Nom de la Pharmacie
           </label>
           <div className="relative">
@@ -37,7 +37,7 @@ export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmac
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="group">
-            <label className="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 ml-1">
+            <label className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">
               Adresse Physique
             </label>
             <div className="relative">
@@ -53,7 +53,7 @@ export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmac
           </div>
 
           <div className="group">
-            <label className="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 ml-1">
+            <label className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">
               Numéro de Téléphone
             </label>
             <div className="relative">
@@ -71,7 +71,7 @@ export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmac
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="group">
-            <label className="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 ml-1">
+            <label className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">
               Pharmacien Titulaire
             </label>
             <div className="relative">
@@ -87,7 +87,7 @@ export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmac
           </div>
 
           <div className="group">
-            <label className="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 ml-1">
+            <label className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">
               Agrément MINSANTE
             </label>
             <div className="relative">
@@ -107,14 +107,14 @@ export function StepPharmacyInfo({ data, onChange, onNext, onPrev }: StepPharmac
       <div className="flex gap-4">
         <button
           onClick={onPrev}
-          className="flex-1 py-5 border-2 border-slate-100 hover:border-slate-200 text-slate-900 font-black rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] tracking-widest uppercase text-sm"
+          className="flex-1 py-5 border-2 border-slate-100 hover:border-slate-200 text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] tracking-widest uppercase text-sm"
         >
           <ChevronLeft className="h-5 w-5" />
           Retour
         </button>
         <button
           onClick={onNext}
-          className="flex-[2] py-5 bg-slate-900 hover:bg-slate-800 text-white font-black rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] tracking-widest uppercase text-sm"
+          className="flex-[2] py-5 bg-[#2720ff] hover:bg-[#1f19cc] text-white font-bold rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] tracking-widest uppercase text-sm shadow-lg shadow-[#2720ff]/25"
         >
           Continuer
           <ChevronRight className="h-5 w-5" />

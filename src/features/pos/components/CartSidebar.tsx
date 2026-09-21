@@ -45,7 +45,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
           <h2 className="font-bold text-lg text-[#0F172A]">Panier Actuel</h2>
         </div>
         <div className="flex items-center gap-2">
-          <span className="bg-[#587dff] text-white px-3 py-1 rounded-full text-xs font-black">
+          <span className="bg-[#587dff] text-white px-3 py-1 rounded-full text-xs font-bold">
             {items.length} ARTICLES
           </span>
           <button onClick={onClose} className="text-[#64748B] hover:text-[#0F172A] p-2">
@@ -74,7 +74,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
                 >
                   <Minus className="h-3 w-3" />
                 </button>
-                <span className="w-6 text-center text-sm font-black">{item.quantity}</span>
+                <span className="w-6 text-center text-sm font-bold">{item.quantity}</span>
                 <button
                   onClick={() => onUpdateQuantity(item.id, 1)}
                   className="p-1 hover:bg-slate-100 rounded text-[#64748B]"
@@ -83,7 +83,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
                 </button>
               </div>
               <div className="text-right w-20">
-                <span className="text-sm font-black text-[#0F172A]">{(item.selling_price * item.quantity).toLocaleString()}</span>
+                <span className="text-sm font-bold text-[#0F172A]">{(item.selling_price * item.quantity).toLocaleString()}</span>
               </div>
             </div>
           ))
@@ -94,7 +94,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
         <div className="flex justify-between items-end">
           <span className="text-[#64748B] text-xs font-bold uppercase tracking-wider">TOTAL À PAYER</span>
           <div className="text-right">
-            <span className="text-4xl font-black text-[#0F172A]">{totalAmount.toLocaleString()}</span>
+            <span className="text-4xl font-bold text-[#0F172A]">{totalAmount.toLocaleString()}</span>
             <span className="text-sm font-bold ml-1 text-[#0F172A]">FCFA</span>
           </div>
         </div>
@@ -106,13 +106,13 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
               type="number"
               value={amountReceived}
               onChange={(e) => setAmountReceived(e.target.value)}
-              className="w-full bg-slate-50 border border-[#587dff] rounded-xl py-3 px-4 font-black text-lg focus:ring-2 focus:ring-[#587dff]/20 focus:border-[#587dff] outline-none"
+              className="w-full bg-slate-50 border border-[#587dff] rounded-xl py-3 px-4 font-bold text-lg focus:ring-2 focus:ring-[#587dff]/20 focus:border-[#587dff] outline-none"
               placeholder="0"
             />
           </div>
           <div>
             <label className="text-[10px] font-bold text-[#64748B] uppercase mb-1.5 block">RENDU MONNAIE</label>
-            <div className="w-full bg-emerald-50 border border-emerald-100 rounded-xl py-3 px-4 font-black text-lg text-emerald-600 flex items-center justify-end">
+            <div className="w-full bg-emerald-50 border border-emerald-100 rounded-xl py-3 px-4 font-bold text-lg text-emerald-600 flex items-center justify-end">
               {change.toLocaleString()}
             </div>
           </div>
@@ -145,7 +145,7 @@ export function CartSidebar({ items, onUpdateQuantity, totalAmount, onClose, isO
           <button
             type="submit"
             disabled={isPending || items.length === 0}
-            className="w-full bg-[#587dff] hover:bg-[#587dff] text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-900/10 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full bg-[#587dff] hover:bg-[#587dff] text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-900/10 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
           >
             {isPending ? "Traitement..." : (
               <>

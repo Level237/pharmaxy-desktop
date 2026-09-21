@@ -30,7 +30,7 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
 
         <div className="flex flex-col gap-1 mb-4">
           <p className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Stock: {product.stock_quantity} restants</p>
-          <p className="text-xl font-black text-[#587dff]">{product.selling_price.toLocaleString()} <span className="text-xs font-bold">FCFA</span></p>
+          <p className="text-xl font-bold text-[#587dff]">{product.selling_price.toLocaleString()} <span className="text-xs font-bold">FCFA</span></p>
         </div>
       </div>
 

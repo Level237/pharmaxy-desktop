@@ -8,7 +8,7 @@ export function DeliveryStats({ stats }: { stats: StatsType }) {
         <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-6">Livraisons du mois</p>
 
         <div className="flex items-end gap-3 mb-6">
-          <h3 className="text-5xl font-black">{stats.monthlyDeliveries}</h3>
+          <h3 className="text-5xl font-bold">{stats.monthlyDeliveries}</h3>
           <span className="bg-white/20 px-2 py-1 rounded-lg text-xs font-bold mb-1">
             +{stats.percentageChange}%
           </span>

@@ -34,15 +34,15 @@ function DeliveriesContent({
             <span className="h-1 w-1 rounded-full bg-[#CBD5E1]" />
             <span className="text-[#10B981]">Livraisons</span>
           </nav>
-          <h2 className="text-4xl font-black text-[#0F172A] tracking-tight">Gestion des Livraisons</h2>
+          <h2 className="text-4xl font-bold text-[#0F172A] ">Gestion des Livraisons</h2>
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="bg-white border-2 border-[#E2E8F0] hover:border-[#3B82F6] hover:text-[#3B82F6] text-[#64748B] px-6 py-4 rounded-2xl flex items-center gap-3 font-black transition-all shadow-lg shadow-blue-500/5 cursor-pointer">
+          <button className="bg-white border-2 border-[#E2E8F0] hover:border-[#3B82F6] hover:text-[#3B82F6] text-[#64748B] px-6 py-4 rounded-2xl flex items-center gap-3 font-bold transition-all shadow-lg shadow-blue-500/5 cursor-pointer">
             <Plus className="h-5 w-5" />
             <span>Nouveau Fournisseur</span>
           </button>
-          <button className="bg-[#3B82F6] hover:bg-[#3B82F6]/80 text-white px-6 py-4 rounded-2xl flex items-center gap-3 font-black transition-all  cursor-pointer">
+          <button className="bg-[#3B82F6] hover:bg-[#3B82F6]/80 text-white px-6 py-4 rounded-2xl flex items-center gap-3 font-bold transition-all  cursor-pointer">
             <Truck className="h-5 w-5" />
             <span>Nouvelle Livraison</span>
           </button>
