@@ -6,6 +6,7 @@ import { Onboarding } from "./features/onboarding";
 import { DashboardPage } from "./features/dashboard";
 import { PosPage } from "./features/pos";
 import { DeliveriesPage } from "./features/deliveries";
+import { StockPage } from "./features/stock";
 import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
@@ -98,6 +99,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DeliveriesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/stock"
+              element={
+                <ProtectedRoute>
+                  <StockPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/inventory"
+              element={
+                <ProtectedRoute>
+                  <StockPage />
                 </ProtectedRoute>
               }
             />

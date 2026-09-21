@@ -9,8 +9,8 @@
 
 ## 🎯 Focus Actuel
 - **Phase active :** 🟠 PRIORITÉ HAUTE
-- **Épic en cours :** Épic 2.1 - Module Stock & Inventaire (`/inventory`)
-- **Objectif immédiat :** Développer l'interface complète de gestion des stocks `/inventory` (catalogue complet, tableau paginé et filtrable, indicateurs de stock et péremption FEFO, formulaire d'ajout et édition de médicaments).
+- **Épic en cours :** Épic 2.2 - Module Caisse & Clôtures Journalières
+- **Objectif immédiat :** Développer le module de caisse (ouverture de caisse avec fond initial, suivi des encaissements par méthode, clôture journalière avec calcul d'écart théorique vs réel, sorties de caisse).
 
 ---
 
@@ -22,7 +22,7 @@
 | 🔴 **Critique** | 1.2 Module POS Fonctionnel & Stock | `[x] TERMINÉ` | 8 / 8 |
 | 🔴 **Critique** | 1.3 Authentification & Sessions | `[x] TERMINÉ` | 5 / 5 |
 | 🔴 **Critique** | 1.4 Impression Thermique ESC/POS | `[x] TERMINÉ` | 4 / 4 |
-| 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[/] EN COURS` | 0 / 8 |
+| 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[x] TERMINÉ` | 8 / 8 |
 | 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[ ] À FAIRE` | 0 / 5 |
 | 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[ ] À FAIRE` | 0 / 5 |
 | 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[ ] À FAIRE` | 0 / 6 |
@@ -85,15 +85,15 @@
 
 ## 🟠 PHASE 2 : PRIORITÉ HAUTE (Essentiel Officine)
 
-### 📦 Épic 2.1 : Module Stock & Inventaire (`/inventory`)
-- [ ] **2.1.1** Page dédiée `/inventory` avec tableau filtrable et paginé
-- [ ] **2.1.2** Formulaire complet d'ajout de produit (Nom, DCI, forme, dosage, prix vente, lot, date péremption)
-- [ ] **2.1.3** Édition & Modification rapide des fiches produits
-- [ ] **2.1.4** Suppression sécurisée de produit (avec contrôle d'historique de ventes)
-- [ ] **2.1.5** Système d'alerte péremption dynamique (Badges : < 3 mois rouge, < 6 mois orange)
-- [ ] **2.1.6** Alertes de stock bas (comparaison stock réel vs `min_stock_alert`)
-- [ ] **2.1.7** Filtres avancés (par catégorie, statut de stock, fournisseur, péremption)
-- [ ] **2.1.8** Export de l'état des stocks au format CSV / Excel
+### 📦 Épic 2.1 : Module Stock & Inventaire (`/inventory` & `/stock`)
+- [x] **2.1.1** Page dédiée `/inventory` / `/stock` avec tableau filtrable et paginé
+- [x] **2.1.2** Formulaire complet d'ajout de produit (Nom, DCI, forme, dosage, prix vente, lot, date péremption)
+- [x] **2.1.3** Édition & Modification rapide des fiches produits
+- [x] **2.1.4** Suppression sécurisée de produit (avec archivage et contrôle d'historique de ventes)
+- [x] **2.1.5** Système d'alerte péremption dynamique (Badges : < 3 mois rouge, < 6 mois orange, vert > 6 mois)
+- [x] **2.1.6** Alertes de stock bas (comparaison stock réel vs `min_stock_alert`)
+- [x] **2.1.7** Filtres avancés (par catégorie, statut de stock, recherche instantanée par nom, DCI, code-barres)
+- [x] **2.1.8** Export de l'état des stocks au format CSV / Excel (UTF-8 BOM)
 
 ---
 
