@@ -1,5 +1,22 @@
-// src/db/initializeDatabase.ts
+import Database from "@tauri-apps/plugin-sql";
 import { getDatabase } from "./database";
+
+/**
+ * Fonction d'auto-migration non-destructive :
+ * Vérifie et ajoute les colonnes manquantes dans les tables existantes (pour éviter les erreurs après mise à jour du schéma).
+ */
+async function addColumnIfNotExists(db: Database, table: string, column: string, definition: string) {
+    try {
+        const columns = await db.select<{ name: string }[]>(`PRAGMA table_info(${table});`);
+        const exists = columns.some((c: { name: string }) => c.name.toLowerCase() === column.toLowerCase());
+        if (!exists) {
+            await db.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition};`);
+            console.log(`[Migration] Colonne "${column}" ajoutée avec succès à la table "${table}".`);
+        }
+    } catch (e) {
+        console.warn(`[Migration] Avertissement lors de l'ajout de ${column} sur ${table}:`, e);
+    }
+}
 
 export const initializeAppDatabase = async () => {
     const db = await getDatabase();
@@ -7,7 +24,7 @@ export const initializeAppDatabase = async () => {
     // 1. Activer les contraintes de clés étrangères
     await db.execute("PRAGMA foreign_keys = ON;");
 
-    // 2. Création des tables dans le bon ordre de dépendance
+    // 2. Création des tables dans le bon ordre de dépendance (idempotent)
 
     // Table 1 : pharmacies
     await db.execute(`
@@ -177,13 +194,13 @@ export const initializeAppDatabase = async () => {
         CREATE TABLE IF NOT EXISTS sales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             uuid TEXT UNIQUE NOT NULL,
-            receipt_number TEXT UNIQUE NOT NULL,
+            receipt_number TEXT UNIQUE,
             user_id INTEGER NOT NULL,
             client_id INTEGER,
-            subtotal INTEGER NOT NULL,
+            subtotal INTEGER DEFAULT 0,
             discount_amount INTEGER DEFAULT 0,
             total_amount INTEGER NOT NULL,
-            paid_amount INTEGER NOT NULL,
+            paid_amount INTEGER DEFAULT 0,
             change_amount INTEGER DEFAULT 0,
             status TEXT CHECK(status IN ('completed', 'cancelled', 'credit')) DEFAULT 'completed',
             notes TEXT,
@@ -195,7 +212,7 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
-    // Table 11 : sale_lines (avec traçabilité du lot vendu pour FEFO et calcul marge)
+    // Table 11 : sale_lines
     await db.execute(`
         CREATE TABLE IF NOT EXISTS sale_lines (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -205,8 +222,8 @@ export const initializeAppDatabase = async () => {
             lot_id INTEGER NOT NULL,
             quantity INTEGER NOT NULL CHECK(quantity > 0),
             unit_price INTEGER NOT NULL,
-            purchase_price INTEGER NOT NULL,
-            subtotal INTEGER NOT NULL,
+            purchase_price INTEGER DEFAULT 0,
+            subtotal INTEGER DEFAULT 0,
             sync_status TEXT DEFAULT 'pending',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -225,7 +242,7 @@ export const initializeAppDatabase = async () => {
             client_id INTEGER,
             amount INTEGER NOT NULL,
             method TEXT CHECK(method IN ('cash', 'mobile_money', 'credit', 'card')) NOT NULL,
-            mobile_money_provider TEXT CHECK(mobile_money_provider IN ('orange', 'mtn', 'other')),
+            mobile_money_provider TEXT,
             mobile_money_ref TEXT,
             notes TEXT,
             user_id INTEGER,
@@ -238,7 +255,7 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
-    // Table 13 : cash_sessions (clôtures journalières & fond de caisse)
+    // Table 13 : cash_sessions
     await db.execute(`
         CREATE TABLE IF NOT EXISTS cash_sessions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -262,7 +279,7 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
-    // Table 14 : stock_adjustments (pertes, casse, périmés, vol)
+    // Table 14 : stock_adjustments
     await db.execute(`
         CREATE TABLE IF NOT EXISTS stock_adjustments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -282,7 +299,7 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
-    // Table 15 : narcotic_logs (Registre officiel stupéfiants & psychotropes MINSANTE)
+    // Table 15 : narcotic_logs
     await db.execute(`
         CREATE TABLE IF NOT EXISTS narcotic_logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -316,7 +333,38 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
-    // 3. Création des Index d'optimisation
+    // 3. MIGRATIONS AUTOMATIQUES (Ajout des colonnes si la base existait déjà)
+    await addColumnIfNotExists(db, "sales", "receipt_number", "TEXT");
+    await addColumnIfNotExists(db, "sales", "subtotal", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "sales", "discount_amount", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "sales", "paid_amount", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "sales", "change_amount", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "sales", "notes", "TEXT");
+
+    await addColumnIfNotExists(db, "sale_lines", "purchase_price", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "sale_lines", "subtotal", "INTEGER DEFAULT 0");
+
+    await addColumnIfNotExists(db, "products", "purchase_price", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "products", "category_id", "INTEGER");
+    await addColumnIfNotExists(db, "products", "is_narcotic", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "products", "is_active", "INTEGER DEFAULT 1");
+
+    await addColumnIfNotExists(db, "lots", "initial_quantity", "INTEGER DEFAULT 0");
+    await addColumnIfNotExists(db, "lots", "supplier_id", "INTEGER");
+    await addColumnIfNotExists(db, "lots", "entry_date", "TEXT DEFAULT CURRENT_DATE");
+
+    await addColumnIfNotExists(db, "clients", "birth_date", "TEXT");
+    await addColumnIfNotExists(db, "clients", "allergies", "TEXT");
+    await addColumnIfNotExists(db, "clients", "pathologies", "TEXT");
+    await addColumnIfNotExists(db, "clients", "email", "TEXT");
+    await addColumnIfNotExists(db, "clients", "max_credit_limit", "INTEGER DEFAULT 50000");
+
+    await addColumnIfNotExists(db, "users", "is_active", "INTEGER DEFAULT 1");
+    await addColumnIfNotExists(db, "payments", "mobile_money_provider", "TEXT");
+    await addColumnIfNotExists(db, "payments", "notes", "TEXT");
+    await addColumnIfNotExists(db, "payments", "user_id", "INTEGER");
+
+    // 4. Index d'optimisation
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_products_barcode ON products(barcode);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_products_dci ON products(dci);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);`);
@@ -331,9 +379,17 @@ export const initializeAppDatabase = async () => {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_deliveries_supplier ON deliveries(supplier_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_narcotic_product ON narcotic_logs(product_id);`);
 
-    // 4. Données de référence & Initialisation (Catégories & Fournisseurs)
+    // 5. Garantir un utilisateur administrateur dans la base
+    const checkUsers = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM users");
+    if (checkUsers[0].count === 0) {
+        await db.execute(`
+            INSERT INTO users (uuid, name, pin_code, role, is_active)
+            VALUES ($1, 'Administrateur', '1234', 'admin', 1)
+        `, [crypto.randomUUID()]);
+        console.log("[Seeding] Utilisateur administrateur par défaut créé (PIN: 1234).");
+    }
 
-    // A. Catégories initiales
+    // 6. Catégories initiales si manquantes
     const checkCategories = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM categories");
     if (checkCategories[0].count === 0) {
         const defaultCategories = [
@@ -362,7 +418,7 @@ export const initializeAppDatabase = async () => {
         }
     }
 
-    // B. Fournisseurs initiaux (Distributeurs agréés au Cameroun)
+    // 7. Fournisseurs initiaux si manquants
     const checkSuppliers = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM suppliers");
     if (checkSuppliers[0].count === 0) {
         const defaultSuppliers = [
@@ -381,7 +437,7 @@ export const initializeAppDatabase = async () => {
         }
     }
 
-    // C. Produits initiaux & Lots de stock réel (avec FEFO)
+    // 8. Produits initiaux si manquants
     const checkProducts = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM products");
     if (checkProducts[0].count === 0) {
         const categoriesList = await db.select<{ id: number; name: string }[]>("SELECT id, name FROM categories");
@@ -417,40 +473,39 @@ export const initializeAppDatabase = async () => {
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
             `, [crypto.randomUUID(), p.name, p.dci, p.form, p.dosage, p.packaging, p.barcode, p.price, p.purchasePrice, p.min, catId, p.cat, p.isNarcotic]);
         }
-        console.log("20 médicaments de test insérés avec succès.");
     }
 
-    // D. Initialisation des Lots de stock réels (Traçabilité FEFO & Péremption)
-    const checkLots = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM lots");
-    if (checkLots[0].count === 0) {
-        const productsList = await db.select<{ id: number; name: string; purchase_price: number }[]>("SELECT id, name, purchase_price FROM products");
-        const suppliersList = await db.select<{ id: number }[]>("SELECT id FROM suppliers LIMIT 1");
-        const defaultSupplierId = suppliersList.length > 0 ? suppliersList[0].id : null;
+    // 9. GARANTIR DU STOCK RÉEL DANS LES LOTS POUR TOUS LES PRODUITS
+    // Si un produit existe mais n'a aucun lot ou 0 stock, on lui associe un lot immédiatement
+    const productsWithoutStock = await db.select<{ id: number; selling_price: number }[]>(`
+        SELECT p.id, p.selling_price
+        FROM products p
+        WHERE (SELECT COALESCE(SUM(quantity_in_stock), 0) FROM lots WHERE product_id = p.id) = 0
+    `);
 
-        for (let i = 0; i < productsList.length; i++) {
-            const prod = productsList[i];
-            // Pour tester l'alerte péremption : le 1er produit aura un lot expirant dans 2 mois
-            // Les autres ont des péremptions lointaines (2026/2027)
-            const expiryDate = i === 0 ? "2026-11-15" : (i % 2 === 0 ? "2027-06-30" : "2026-12-31");
-            const initialQty = 25 + (i * 3) % 40;
+    if (productsWithoutStock.length > 0) {
+        console.log(`[Seeding] Initialisation des lots de stock pour ${productsWithoutStock.length} produits sans stock...`);
+        for (let i = 0; i < productsWithoutStock.length; i++) {
+            const p = productsWithoutStock[i];
+            const expiryDate = i === 0 ? "2026-11-15" : "2027-12-31";
+            const initialQty = 35 + (i * 2) % 30;
 
             await db.execute(`
-                INSERT INTO lots (uuid, product_id, lot_number, expiry_date, purchase_price, quantity_in_stock, initial_quantity, supplier_id, entry_date)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                INSERT INTO lots (uuid, product_id, lot_number, expiry_date, purchase_price, quantity_in_stock, initial_quantity, entry_date)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             `, [
                 crypto.randomUUID(),
-                prod.id,
+                p.id,
                 `LOT-2026-${(1000 + i).toString()}`,
                 expiryDate,
-                prod.purchase_price || 1000,
+                Math.round(p.selling_price * 0.6),
                 initialQty,
                 initialQty,
-                defaultSupplierId,
-                "2026-01-10"
+                "2026-01-01"
             ]);
         }
-        console.log("Lots de stock initialisés pour tous les produits (stocks réels créés).");
+        console.log("[Seeding] Stocks réels garantis avec succès.");
     }
 
-    console.log("Base de données PHARMAXY et ses index initialisés avec succès.");
+    console.log("Base de données PHARMAXY initialisée et auto-migrée avec succès.");
 };

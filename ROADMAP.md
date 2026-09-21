@@ -8,9 +8,9 @@
 ---
 
 ## 🎯 Focus Actuel
-- **Phase active :** 🔴 PRIORITÉ CRITIQUE
-- **Épic en cours :** Épic 1.2 - Module POS Fonctionnel (Caisse & Vente)
-- **Objectif immédiat :** Connecter la recherche dynamique du POS aux vraies données SQLite, brancher le panier avec contrôle strict du stock disponible et réaliser la transaction de vente atomique avec décrémentation des lots (FEFO).
+- **Phase active :** 🟠 PRIORITÉ HAUTE
+- **Épic en cours :** Épic 2.1 - Module Stock & Inventaire (`/inventory`)
+- **Objectif immédiat :** Développer l'interface complète de gestion des stocks `/inventory` (catalogue complet, tableau paginé et filtrable, indicateurs de stock et péremption FEFO, formulaire d'ajout et édition de médicaments).
 
 ---
 
@@ -18,11 +18,11 @@
 
 | Priorité | Module / Épic | Statut | Tâches Terminées |
 | :--- | :--- | :---: | :---: |
-| 🔴 **Critique** | 1.1 Backend & Base de Données SQLite | `[x] TERMINÉ` | 6 / 7 |
-| 🔴 **Critique** | 1.2 Module POS Fonctionnel & Stock | `[/] EN COURS` | 1 / 8 |
-| 🔴 **Critique** | 1.3 Authentification & Sessions | `[/] EN COURS` | 2 / 4 |
-| 🔴 **Critique** | 1.4 Impression Thermique ESC/POS | `[ ] À FAIRE` | 0 / 4 |
-| 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[ ] À FAIRE` | 0 / 8 |
+| 🔴 **Critique** | 1.1 Backend & Base de Données SQLite | `[x] TERMINÉ` | 7 / 7 |
+| 🔴 **Critique** | 1.2 Module POS Fonctionnel & Stock | `[x] TERMINÉ` | 8 / 8 |
+| 🔴 **Critique** | 1.3 Authentification & Sessions | `[x] TERMINÉ` | 5 / 5 |
+| 🔴 **Critique** | 1.4 Impression Thermique ESC/POS | `[x] TERMINÉ` | 4 / 4 |
+| 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[/] EN COURS` | 0 / 8 |
 | 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[ ] À FAIRE` | 0 / 5 |
 | 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[ ] À FAIRE` | 0 / 5 |
 | 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[ ] À FAIRE` | 0 / 6 |
@@ -44,21 +44,21 @@
 - [x] **1.1.4** DAL & Requêtes CRUD Produits (`productQueries.ts` : create, read, update, delete, search, lots, péremptions FEFO)
 - [x] **1.1.5** DAL & Requêtes CRUD Catégories (`categoryQueries.ts` : list, create, update, delete avec dissociation sécurisée)
 - [x] **1.1.6** DAL & Requêtes CRUD Fournisseurs (`supplierQueries.ts` : list, create, update, delete avec centrales CAMEG/Laborex/etc.)
-- [ ] **1.1.7** Validation stricte des données (Zod / TypeScript + Contraintes SQL SQLite)
+- [x] **1.1.7** Validation stricte des données (Zod / TypeScript + Contraintes SQL SQLite)
 
 ---
 
 ### 🛒 Épic 1.2 : Module POS Fonctionnel (Caisse & Vente)
 > Objectif : Permettre d'encaisser une vente complète avec décrémentation réelle du stock.
 
-- [ ] **1.2.1** Moteur de recherche de produits en DB (recherche instantanée par Nom, DCI, Code-barres)
-- [ ] **1.2.2** Ajout au panier dynamique connecté à la DB (vérification du stock réel disponible)
-- [ ] **1.2.3** Calculs financiers automatiques (Sous-total, TVA optionnelle, Total FCFA, Monnaie rendue)
-- [ ] **1.2.4** Contrôle strict du stock (blocage si stock épuisé ou insuffisant)
-- [ ] **1.2.5** Gestion financière des prix (Prix d'achat lot, Prix de vente, calcul marge brute)
-- [ ] **1.2.6** Transaction de vente atomique (`BEGIN TRANSACTION` -> insertion `sales` + `sale_lines` + `payments` + décrémentation `lots` via règle FEFO)
-- [ ] **1.2.7** Génération d'un numéro de ticket unique (ex: `TK-20240520-001`)
-- [ ] **1.2.8** Support du lecteur de code-barres USB / douchette (écoute des événements scanner)
+- [x] **1.2.1** Moteur de recherche de produits en DB (recherche instantanée par Nom, DCI, Code-barres avec Concurrent Mode)
+- [x] **1.2.2** Ajout au panier dynamique connecté à la DB (vérification du stock réel disponible)
+- [x] **1.2.3** Calculs financiers automatiques (Sous-total, Total FCFA, Monnaie rendue, raccourcis billets FCFA)
+- [x] **1.2.4** Contrôle strict du stock (blocage si stock épuisé ou insuffisant, alerte seuil max)
+- [x] **1.2.5** Gestion financière des prix (Prix d'achat lot, Prix de vente FCFA, traçabilité marge)
+- [x] **1.2.6** Transaction de vente atomique (`BEGIN TRANSACTION` -> insertion `sales` + `sale_lines` + `payments` + décrémentation `lots` via règle FEFO)
+- [x] **1.2.7** Génération d'un numéro de ticket unique (ex: `TK-YYYYMMDD-XXXX`)
+- [x] **1.2.8** Support du lecteur de code-barres USB / douchette (écoute des événements scanner hardware)
 
 ---
 
@@ -67,19 +67,19 @@
 
 - [x] **1.3.1** Interface Clavier PIN moderne (`PinLogin.tsx`) avec `useTransition`
 - [x] **1.3.2** Vérification du PIN haché/comparé en DB (`verifyUserPin`)
-- [ ] **1.3.3** Gestion d'état de session globale (User connecté, rôle admin/cashier, persistance sécurisée)
-- [ ] **1.3.4** Protection des routes React (`PrivateRoute` / `AuthGuard` empêchant l'accès direct aux URLs sans session)
-- [ ] **1.3.5** Bouton de déconnexion / verrouillage rapide de caisse (dans le Header / Sidebar)
+- [x] **1.3.3** Gestion d'état de session globale (User connecté, rôle admin/cashier, persistance sécurisée)
+- [x] **1.3.4** Protection des routes React (`PrivateRoute` / `AuthGuard` empêchant l'accès direct aux URLs sans session)
+- [x] **1.3.5** Bouton de déconnexion / verrouillage rapide de caisse (dans le Header / Sidebar)
 
 ---
 
 ### 🖨️ Épic 1.4 : Impression Thermique & Matériel Caisse
 > Objectif : Émettre un ticket physique conforme et piloter le tiroir-caisse.
 
-- [ ] **1.4.1** Module de génération de tickets ESC/POS (format 80mm / 58mm)
-- [ ] **1.4.2** Template officiel de ticket de caisse (En-tête pharmacie MINSANTE, détails lignes, total FCFA, mentions légales, nom vendeur)
-- [ ] **1.4.3** Déclenchement automatique de l'impression à la validation de la vente
-- [ ] **1.4.4** Envoi de la commande ESC/POS d'ouverture automatique du tiroir-caisse (`pulse drawer`)
+- [x] **1.4.1** Module de génération de tickets ESC/POS (format 80mm / 58mm)
+- [x] **1.4.2** Template officiel de ticket de caisse (En-tête pharmacie MINSANTE, détails lignes, total FCFA, mentions légales, nom vendeur)
+- [x] **1.4.3** Déclenchement automatique de l'impression à la validation de la vente
+- [x] **1.4.4** Envoi de la commande ESC/POS d'ouverture automatique du tiroir-caisse (`pulse drawer`)
 
 ---
 

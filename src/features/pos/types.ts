@@ -10,7 +10,7 @@ export interface Product {
   selling_price: number;
   min_stock_alert: number;
   category: string;
-  stock_quantity?: number; // Calculé ou récupéré depuis 'lots'
+  stock_quantity?: number; // Calculé en temps réel depuis 'lots'
 }
 
 export interface CartItem extends Product {
@@ -25,4 +25,17 @@ export interface SalePayload {
   paymentMethod: PaymentMethod;
   amountReceived: number;
   change: number;
+  discountAmount?: number;
+  clientId?: number | null;
+  userId?: number;
+  notes?: string;
+}
+
+export interface SaleSuccessData {
+  saleId: number;
+  receiptNumber: string;
+  totalAmount: number;
+  changeAmount: number;
+  itemsCount: number;
+  createdAt: string;
 }

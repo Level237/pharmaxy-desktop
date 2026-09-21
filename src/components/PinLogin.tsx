@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShieldAlert, UserCheck, Delete, Loader2 } from "lucide-react";
 import { getPharmacyInfo } from "../db/pharmacyQueries";
-import { verifyUserPin } from "../db/userQueries";
+import { useAuth } from "../shared/context/AuthContext";
 import logo2 from "../assets/logo.png";
 
 // ---------------------------------------------------------------------------
@@ -40,6 +40,7 @@ function usePharmacyData() {
 export default function PinLogin() {
   const navigate = useNavigate();
   const pharmacyName = usePharmacyData();
+  const { loginWithPin } = useAuth();
   
   const [pin, setPin] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -60,9 +61,8 @@ export default function PinLogin() {
     startTransition(async () => {
       setError(null);
       try {
-        const user = await verifyUserPin(enteredPin);
-        if (user) {
-          sessionStorage.setItem("currentUser", JSON.stringify(user));
+        const success = await loginWithPin(enteredPin);
+        if (success) {
           // Léger délai purement UX pour montrer l'état de succès/chargement
           await new Promise(r => setTimeout(r, 400)); 
           navigate("/dashboard");

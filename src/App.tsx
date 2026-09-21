@@ -10,6 +10,8 @@ import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
 import PinLogin from "./components/PinLogin";
+import { AuthProvider } from "./shared/context/AuthContext";
+import { ProtectedRoute } from "./shared/components/ProtectedRoute";
 
 // 1. Gardien Global (Initialisation et Protection)
 function GlobalGuard({ children }: { children: React.ReactNode }) {
@@ -67,16 +69,41 @@ function GlobalGuard({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <HashRouter>
-      <GlobalGuard>
-        <Routes>
-          <Route path="/" element={<div>Redirection...</div>} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/login" element={<PinLogin />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/pos" element={<PosPage />} />
-          <Route path="/deliveries" element={<DeliveriesPage />} />
-        </Routes>
-      </GlobalGuard>
+      <AuthProvider>
+        <GlobalGuard>
+          <Routes>
+            <Route path="/" element={<div>Redirection...</div>} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/login" element={<PinLogin />} />
+            
+            {/* Routes Protégées par Session Caisse */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pos"
+              element={
+                <ProtectedRoute>
+                  <PosPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deliveries"
+              element={
+                <ProtectedRoute>
+                  <DeliveriesPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </GlobalGuard>
+      </AuthProvider>
     </HashRouter>
   );
 }

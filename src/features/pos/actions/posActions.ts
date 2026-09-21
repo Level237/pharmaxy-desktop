@@ -1,8 +1,9 @@
 import { getAllProducts } from "../../../db/productQueries";
-import type { Product, SalePayload } from "../types";
+import { executeSaleTransaction } from "../../../db/saleQueries";
+import type { Product, SalePayload, SaleSuccessData } from "../types";
 
-export async function fetchProducts(): Promise<Product[]> {
-  const products = await getAllProducts();
+export async function fetchProducts(searchTerm?: string, category?: string): Promise<Product[]> {
+  const products = await getAllProducts({ search: searchTerm, category });
   return products.map(p => ({
     id: p.id,
     uuid: p.uuid,
@@ -19,8 +20,33 @@ export async function fetchProducts(): Promise<Product[]> {
   }));
 }
 
-export async function createSaleAction(payload: SalePayload) {
-  // Simulation d'une action de vente
-  console.log("Vente validée:", payload);
-  return new Promise((resolve) => setTimeout(resolve, 1000));
+export async function createSaleAction(payload: SalePayload): Promise<SaleSuccessData> {
+  let userId = payload.userId;
+  if (!userId) {
+    try {
+      const stored = sessionStorage.getItem("currentUser");
+      if (stored) {
+        const u = JSON.parse(stored);
+        userId = u.id;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  return await executeSaleTransaction({
+    userId: userId || 1,
+    clientId: payload.clientId,
+    items: payload.items.map(it => ({
+      productId: it.id,
+      productName: it.name,
+      quantity: it.quantity,
+      unitPrice: it.selling_price
+    })),
+    paymentMethod: payload.paymentMethod,
+    amountReceived: payload.amountReceived,
+    changeAmount: payload.change,
+    discountAmount: payload.discountAmount,
+    notes: payload.notes
+  });
 }

@@ -1,4 +1,4 @@
-import { use, Suspense, useState } from "react";
+import { use, Suspense, useState, useEffect } from "react";
 import { Calendar } from "lucide-react";
 import { Layout } from "../../shared/components/Layout";
 import { KpiCards } from "./components/KpiCards";
@@ -12,11 +12,13 @@ import type { Pharmacy, Sale, DashboardStats } from "./types";
 function DashboardContent({ 
   pharmacyPromise, 
   salesPromise, 
-  statsPromise 
+  statsPromise,
+  onRefresh
 }: { 
-  pharmacyPromise: Promise<Pharmacy | null>,
-  salesPromise: Promise<Sale[]>,
-  statsPromise: Promise<DashboardStats>
+  pharmacyPromise: Promise<Pharmacy | null>;
+  salesPromise: Promise<Sale[]>;
+  statsPromise: Promise<DashboardStats>;
+  onRefresh?: () => void;
 }) {
   const pharmacy = use(pharmacyPromise);
   const sales = use(salesPromise);
@@ -34,7 +36,7 @@ function DashboardContent({
         </div>
         <div className="bg-[#E2E8F0] px-4 py-2 rounded-lg flex items-center gap-2 text-[#475569]">
           <Calendar className="h-4 w-4" />
-          <span className="text-sm font-bold">Lundi 24 Mai 2024</span>
+          <span className="text-sm font-bold">Aujourd'hui</span>
         </div>
       </div>
 
@@ -44,7 +46,7 @@ function DashboardContent({
 
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-8">
-          <RecentSalesTable sales={sales} />
+          <RecentSalesTable sales={sales} onRefresh={onRefresh} />
         </div>
         <div className="col-span-4 space-y-8">
           <QuickActions />
@@ -56,14 +58,27 @@ function DashboardContent({
 }
 
 export function DashboardPage() {
-  // On utilise useState pour créer et stabiliser les promises au montage du composant
-  // Cela évite de les recréer à chaque rendu (ce qui causerait une boucle avec Suspense)
-  // Et cela assure qu'elles ne sont pas créées trop tôt (avant l'initialisation de la DB)
-  const [promises] = useState(() => ({
+  const [promises, setPromises] = useState(() => ({
     pharmacy: fetchPharmacyInfo(),
     sales: fetchRecentSales(),
     stats: fetchDashboardStats()
   }));
+
+  const handleRefresh = () => {
+    setPromises({
+      pharmacy: fetchPharmacyInfo(),
+      sales: fetchRecentSales(),
+      stats: fetchDashboardStats()
+    });
+  };
+
+  useEffect(() => {
+    const onFocus = () => {
+      handleRefresh();
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
 
   return (
     <Layout>
@@ -72,6 +87,7 @@ export function DashboardPage() {
           pharmacyPromise={promises.pharmacy} 
           salesPromise={promises.sales} 
           statsPromise={promises.stats} 
+          onRefresh={handleRefresh}
         />
       </Suspense>
     </Layout>

@@ -5,6 +5,7 @@ export interface Pharmacy {
 
 export interface Sale {
   id: string;
+  saleId?: number;
   client: string;
   products: string;
   amount: string;
