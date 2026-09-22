@@ -9,8 +9,8 @@
 
 ## 🎯 Focus Actuel
 - **Phase active :** 🟠 PRIORITÉ HAUTE
-- **Épic en cours :** Épic 2.2 - Module Caisse & Clôtures Journalières
-- **Objectif immédiat :** Développer le module de caisse (ouverture de caisse avec fond initial, suivi des encaissements par méthode, clôture journalière avec calcul d'écart théorique vs réel, sorties de caisse).
+- **Épic en cours :** Épic 2.3 - Module Patients (`/patients`)
+- **Objectif immédiat :** Développer l'annuaire et le dossier patient (fiche complète, allergies, pathologies chroniques, recherche instantanée, historique des achats et ordonnances, liaison POS).
 
 ---
 
@@ -23,7 +23,7 @@
 | 🔴 **Critique** | 1.3 Authentification & Sessions | `[x] TERMINÉ` | 5 / 5 |
 | 🔴 **Critique** | 1.4 Impression Thermique ESC/POS | `[x] TERMINÉ` | 4 / 4 |
 | 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[x] TERMINÉ` | 8 / 8 |
-| 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[ ] À FAIRE` | 0 / 5 |
+| 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[x] TERMINÉ` | 5 / 5 |
 | 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[ ] À FAIRE` | 0 / 5 |
 | 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[ ] À FAIRE` | 0 / 6 |
 | 🟠 **Haute** | 2.5 Module Livraisons & Réceptions Fournisseurs | `[ ] À FAIRE` | 1 / 5 |
@@ -98,11 +98,11 @@
 ---
 
 ### 💵 Épic 2.2 : Module Caisse & Clôtures Journalières
-- [ ] **2.2.1** Modal / Écran d'ouverture de caisse (saisie du fond de caisse initial)
-- [ ] **2.2.2** Suivi des encaissements par méthode (Espèces, Orange Money, MTN MoMo, Carte, Crédit)
-- [ ] **2.2.3** Clôture journalière (comptage caisse, calcul automatique écart théorique vs réel)
-- [ ] **2.2.4** Historique et consultation des clôtures passées
-- [ ] **2.2.5** Enregistrement des décaissements / sorties de caisse (dépenses courantes)
+- [x] **2.2.1** Modal / Écran d'ouverture de caisse (saisie du fond de caisse initial)
+- [x] **2.2.2** Suivi des encaissements par méthode (Espèces, Orange Money, MTN MoMo, Carte, Crédit)
+- [x] **2.2.3** Clôture journalière (comptage caisse, calcul automatique écart théorique vs réel)
+- [x] **2.2.4** Historique et consultation des clôtures passées
+- [x] **2.2.5** Enregistrement des décaissements / sorties de caisse (dépenses courantes)
 
 ---
 

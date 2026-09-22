@@ -7,6 +7,7 @@ import { DashboardPage } from "./features/dashboard";
 import { PosPage } from "./features/pos";
 import { DeliveriesPage } from "./features/deliveries";
 import { StockPage } from "./features/stock";
+import { CashPage } from "./features/cash";
 import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
@@ -107,6 +108,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <StockPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cash"
+              element={
+                <ProtectedRoute>
+                  <CashPage />
                 </ProtectedRoute>
               }
             />

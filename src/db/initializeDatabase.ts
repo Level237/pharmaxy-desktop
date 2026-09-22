@@ -333,6 +333,23 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
+    // Table 17 : cash_movements (décaissements et dépôts d'espèces de caisse)
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS cash_movements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            uuid TEXT UNIQUE NOT NULL,
+            cash_session_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            type TEXT CHECK(type IN ('withdrawal', 'deposit')) NOT NULL,
+            amount INTEGER NOT NULL CHECK(amount > 0),
+            reason TEXT NOT NULL,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(cash_session_id) REFERENCES cash_sessions(id) ON DELETE CASCADE,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
+    `);
+
     // 3. MIGRATIONS AUTOMATIQUES (Ajout des colonnes si la base existait déjà)
     await addColumnIfNotExists(db, "sales", "receipt_number", "TEXT");
     await addColumnIfNotExists(db, "sales", "subtotal", "INTEGER DEFAULT 0");
@@ -340,6 +357,7 @@ export const initializeAppDatabase = async () => {
     await addColumnIfNotExists(db, "sales", "paid_amount", "INTEGER DEFAULT 0");
     await addColumnIfNotExists(db, "sales", "change_amount", "INTEGER DEFAULT 0");
     await addColumnIfNotExists(db, "sales", "notes", "TEXT");
+    await addColumnIfNotExists(db, "sales", "cash_session_id", "INTEGER");
 
     await addColumnIfNotExists(db, "sale_lines", "purchase_price", "INTEGER DEFAULT 0");
     await addColumnIfNotExists(db, "sale_lines", "subtotal", "INTEGER DEFAULT 0");
@@ -363,6 +381,7 @@ export const initializeAppDatabase = async () => {
     await addColumnIfNotExists(db, "payments", "mobile_money_provider", "TEXT");
     await addColumnIfNotExists(db, "payments", "notes", "TEXT");
     await addColumnIfNotExists(db, "payments", "user_id", "INTEGER");
+    await addColumnIfNotExists(db, "payments", "cash_session_id", "INTEGER");
 
     // 4. Index d'optimisation
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_products_barcode ON products(barcode);`);
@@ -375,6 +394,10 @@ export const initializeAppDatabase = async () => {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sale_lines_sale ON sale_lines(sale_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_client ON sales(client_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_receipt ON sales(receipt_number);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_cash_session ON sales(cash_session_id);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_payments_cash_session ON payments(cash_session_id);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_sessions_status ON cash_sessions(user_id, status);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_movements_session ON cash_movements(cash_session_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_clients_phone ON clients(phone);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_deliveries_supplier ON deliveries(supplier_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_narcotic_product ON narcotic_logs(product_id);`);

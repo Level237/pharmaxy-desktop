@@ -1,19 +1,27 @@
 import { use, Suspense, useState, useTransition, useEffect, useRef } from "react";
-import { ShoppingBag, Search, Barcode, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingBag, Search, Barcode, RefreshCw, ChevronLeft, ChevronRight, Coins, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Layout } from "../../shared/components/Layout";
+import { AuthContext } from "../../shared/context/AuthContext";
 import { ProductCard } from "./components/ProductCard";
 import { CartSidebar } from "./components/CartSidebar";
 import { SaleReceiptModal } from "./components/SaleReceiptModal";
+import { OpenCashSessionModal } from "../cash/components/OpenCashSessionModal";
+import { getActiveCashSession, type CashSession } from "../../db/cashQueries";
 import { fetchProducts } from "./actions/posActions";
 import { useCart } from "./hooks/useCart";
 import type { Product, SaleSuccessData } from "./types";
 
 function PosContent({ 
   productsPromise,
+  cashSession,
+  onPromptOpenCash,
   onSaleSuccess,
   onOpenReceipt
 }: { 
   productsPromise: Promise<Product[]>;
+  cashSession: CashSession | null;
+  onPromptOpenCash: () => void;
   onSaleSuccess: (saleData: SaleSuccessData) => void;
   onOpenReceipt: (saleId: number) => void;
 }) {
@@ -163,9 +171,30 @@ function PosContent({
       )}
 
       {/* Barre d'outils supérieure */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Comptoir de Vente (POS)</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-bold text-slate-900">Comptoir de Vente (POS)</h2>
+            {cashSession ? (
+              <Link
+                to="/cash"
+                className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                title="Gérer la session de caisse"
+              >
+                <Coins className="w-3.5 h-3.5" />
+                <span>Session #{cashSession.id.toString().padStart(5, "0")} Ouverte ({cashSession.opening_amount.toLocaleString("fr-FR")} F)</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={onPromptOpenCash}
+                className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                <span>Caisse non ouverte • Cliquer pour ouvrir</span>
+              </button>
+            )}
+          </div>
           <p className="text-slate-500 text-xs mt-0.5">
             Sélectionnez les médicaments ou utilisez la douchette code-barres.
           </p>
@@ -306,13 +335,33 @@ function PosContent({
 }
 
 export function PosPage() {
+  const auth = use(AuthContext);
+  const currentUserId = auth?.user?.id || 1;
+  const currentUserName = auth?.user?.name || "Caissier";
+
   const [productsPromise, setProductsPromise] = useState(() => fetchProducts());
   const [receiptSaleId, setReceiptSaleId] = useState<number | null>(null);
+  const [cashSession, setCashSession] = useState<CashSession | null>(null);
+  const [isOpenCashModalOpen, setIsOpenCashModalOpen] = useState(false);
+
+  const refreshCashSession = async () => {
+    try {
+      const active = await getActiveCashSession(currentUserId);
+      setCashSession(active);
+    } catch (e) {
+      console.error("Erreur vérification session caisse:", e);
+    }
+  };
+
+  useEffect(() => {
+    refreshCashSession();
+  }, [currentUserId]);
 
   const handleSaleSuccess = (saleData: SaleSuccessData) => {
     setReceiptSaleId(saleData.saleId);
     // Rafraîchissement des produits avec décrémentation des stocks FEFO
     setProductsPromise(fetchProducts());
+    refreshCashSession();
   };
 
   const handleNewSale = () => {
@@ -329,6 +378,8 @@ export function PosPage() {
       }>
         <PosContent 
           productsPromise={productsPromise} 
+          cashSession={cashSession}
+          onPromptOpenCash={() => setIsOpenCashModalOpen(true)}
           onSaleSuccess={handleSaleSuccess}
           onOpenReceipt={(id) => setReceiptSaleId(id)}
         />
@@ -340,6 +391,18 @@ export function PosPage() {
         isOpen={receiptSaleId !== null}
         onClose={() => setReceiptSaleId(null)}
         onNewSale={handleNewSale}
+      />
+
+      {/* Modal d'Ouverture de Caisse Rapide */}
+      <OpenCashSessionModal
+        isOpen={isOpenCashModalOpen}
+        onClose={() => setIsOpenCashModalOpen(false)}
+        currentUserId={currentUserId}
+        currentUserName={currentUserName}
+        onSuccess={(session) => {
+          setCashSession(session);
+          setIsOpenCashModalOpen(false);
+        }}
       />
     </Layout>
   );

@@ -17,6 +17,7 @@ export interface SaleTransactionInput {
     changeAmount: number;
     discountAmount?: number;
     notes?: string;
+    cashSessionId?: number | null;
 }
 
 export interface SaleResult {
@@ -123,9 +124,9 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
             INSERT INTO sales (
                 uuid, receipt_number, user_id, client_id,
                 subtotal, discount_amount, total_amount, paid_amount,
-                change_amount, status, notes
+                change_amount, status, notes, cash_session_id
             ) VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
             )
         `, [
             saleUuid,
@@ -138,7 +139,8 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
             paidAmount,
             changeAmount,
             saleStatus,
-            input.notes || null
+            input.notes || null,
+            input.cashSessionId || null
         ]);
 
         const saleId = saleRes.lastInsertId ?? 0;
@@ -197,9 +199,9 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
         await db.execute(`
             INSERT INTO payments (
                 uuid, sale_id, client_id, amount,
-                method, user_id, notes
+                method, user_id, notes, cash_session_id
             ) VALUES (
-                $1, $2, $3, $4, $5, $6, $7
+                $1, $2, $3, $4, $5, $6, $7, $8
             )
         `, [
             crypto.randomUUID(),
@@ -208,7 +210,8 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
             input.paymentMethod === 'credit' ? totalAmount : Math.min(paidAmount, totalAmount),
             safePaymentMethod,
             validUserId,
-            input.notes || null
+            input.notes || null,
+            input.cashSessionId || null
         ]);
 
         // 8. Si vente à crédit et client renseigné : mise à jour du compte dette client
