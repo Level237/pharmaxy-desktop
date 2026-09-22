@@ -372,6 +372,8 @@ export const initializeAppDatabase = async () => {
     await addColumnIfNotExists(db, "lots", "entry_date", "TEXT DEFAULT CURRENT_DATE");
 
     await addColumnIfNotExists(db, "clients", "birth_date", "TEXT");
+    await addColumnIfNotExists(db, "clients", "gender", "TEXT");
+    await addColumnIfNotExists(db, "clients", "address", "TEXT");
     await addColumnIfNotExists(db, "clients", "allergies", "TEXT");
     await addColumnIfNotExists(db, "clients", "pathologies", "TEXT");
     await addColumnIfNotExists(db, "clients", "email", "TEXT");
@@ -399,6 +401,7 @@ export const initializeAppDatabase = async () => {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_sessions_status ON cash_sessions(user_id, status);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_movements_session ON cash_movements(cash_session_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_clients_phone ON clients(phone);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_clients_name ON clients(name);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_deliveries_supplier ON deliveries(supplier_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_narcotic_product ON narcotic_logs(product_id);`);
 

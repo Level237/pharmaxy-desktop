@@ -8,6 +8,7 @@ import { PosPage } from "./features/pos";
 import { DeliveriesPage } from "./features/deliveries";
 import { StockPage } from "./features/stock";
 import { CashPage } from "./features/cash";
+import { PatientsPage } from "./features/patients";
 import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
@@ -116,6 +117,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CashPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/patients"
+              element={
+                <ProtectedRoute>
+                  <PatientsPage />
                 </ProtectedRoute>
               }
             />

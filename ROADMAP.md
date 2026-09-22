@@ -9,8 +9,8 @@
 
 ## 🎯 Focus Actuel
 - **Phase active :** 🟠 PRIORITÉ HAUTE
-- **Épic en cours :** Épic 2.3 - Module Patients (`/patients`)
-- **Objectif immédiat :** Développer l'annuaire et le dossier patient (fiche complète, allergies, pathologies chroniques, recherche instantanée, historique des achats et ordonnances, liaison POS).
+- **Épic en cours :** Épic 2.4 - Module Crédit Client (Gestion des Dettes) (`/credits`)
+- **Objectif immédiat :** Page dédiée `/credits`, enregistrement des remboursements/acomptes, calcul en temps réel de l'encours et solde débiteur, alertes créances en souffrance (> 30 jours), bordereau de dette et reçu de versement.
 
 ---
 
@@ -24,7 +24,7 @@
 | 🔴 **Critique** | 1.4 Impression Thermique ESC/POS | `[x] TERMINÉ` | 4 / 4 |
 | 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[x] TERMINÉ` | 8 / 8 |
 | 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[x] TERMINÉ` | 5 / 5 |
-| 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[ ] À FAIRE` | 0 / 5 |
+| 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[x] TERMINÉ` | 5 / 5 |
 | 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[ ] À FAIRE` | 0 / 6 |
 | 🟠 **Haute** | 2.5 Module Livraisons & Réceptions Fournisseurs | `[ ] À FAIRE` | 1 / 5 |
 | 🟡 **Moyenne** | 3.1 Module Rapports & Statistiques (`/reports`) | `[ ] À FAIRE` | 0 / 7 |
@@ -107,11 +107,11 @@
 ---
 
 ### 👤 Épic 2.3 : Module Patients (`/patients`)
-- [ ] **2.3.1** Page annuaire des patients (`/patients`)
-- [ ] **2.3.2** Fiche patient complète (Nom, téléphone, date de naissance, allergies, pathologies chroniques)
-- [ ] **2.3.3** Recherche instantanée de patient (par téléphone ou nom)
-- [ ] **2.3.4** Association optionnelle d'un patient lors de la vente au POS
-- [ ] **2.3.5** Historique complet des achats et ordonnances par patient
+- [x] **2.3.1** Page annuaire des patients (`/patients`)
+- [x] **2.3.2** Fiche patient complète (Nom, téléphone, date de naissance, allergies, pathologies chroniques)
+- [x] **2.3.3** Recherche instantanée de patient (par téléphone ou nom)
+- [x] **2.3.4** Association optionnelle d'un patient lors de la vente au POS
+- [x] **2.3.5** Historique complet des achats et ordonnances par patient
 
 ---
 

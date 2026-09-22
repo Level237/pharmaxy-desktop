@@ -1,7 +1,9 @@
-import { ShoppingBag, Minus, Plus, Trash2, Wallet, Smartphone, Banknote, Printer, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
-import { useState, useActionState } from "react";
+import { ShoppingBag, Minus, Plus, Trash2, Wallet, Smartphone, Banknote, Printer, CheckCircle2, AlertTriangle, ArrowRight, User, UserPlus } from "lucide-react";
+import { useState, useActionState, useEffect } from "react";
 import type { CartItem, PaymentMethod, SalePayload, SaleSuccessData } from "../types";
 import { createSaleAction } from "../actions/posActions";
+import { getAllPatients, type Patient } from "../../../db/patientQueries";
+import { PatientFormModal } from "../../patients/components/PatientFormModal";
 
 interface CartSidebarProps {
   items: CartItem[];
@@ -34,6 +36,28 @@ export function CartSidebar({
   const [amountReceived, setAmountReceived] = useState<string>('');
   const [lastSale, setLastSale] = useState<SaleSuccessData | null>(null);
 
+  // Gestion des patients
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+  const [isNewPatientModalOpen, setIsNewPatientModalOpen] = useState(false);
+
+  const loadPatients = async () => {
+    try {
+      const list = await getAllPatients();
+      setPatients(list);
+    } catch (err) {
+      console.error("Erreur chargement patients dans POS:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      loadPatients();
+    }
+  }, [isOpen]);
+
+  const selectedPatient = patients.find(p => p.id === selectedPatientId) || null;
+
   const receivedNum = parseFloat(amountReceived) || 0;
   const change = Math.max(0, receivedNum - totalAmount);
 
@@ -45,17 +69,23 @@ export function CartSidebar({
           return `Le montant reçu (${receivedNum.toLocaleString()} F) est inférieur au total (${totalAmount.toLocaleString()} F).`;
         }
 
+        if (paymentMethod === 'credit' && !selectedPatient) {
+          return "Pour accorder un crédit, vous devez obligatoirement sélectionner un patient enregistré.";
+        }
+
         const payload: SalePayload = {
           items,
           totalAmount,
           paymentMethod,
           amountReceived: paymentMethod === 'cash' ? receivedNum : totalAmount,
-          change: paymentMethod === 'cash' ? change : 0
+          change: paymentMethod === 'cash' ? change : 0,
+          clientId: selectedPatient ? selectedPatient.id : null
         };
 
         const result = await createSaleAction(payload);
         setLastSale(result);
         onClearCart();
+        setSelectedPatientId(null);
         onSaleSuccess?.(result);
         return null;
       } catch (err: any) {
@@ -255,6 +285,55 @@ export function CartSidebar({
           {/* 4. Section Règlement & Validation */}
           <div className="p-6 border-t border-slate-200 bg-white space-y-5">
             
+            {/* Sélection du Patient */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                  <User className="w-3 h-3 text-slate-400" />
+                  <span>Patient / Client</span>
+                  {paymentMethod === 'credit' && (
+                    <span className="text-rose-600 font-bold">* Requis</span>
+                  )}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsNewPatientModalOpen(true)}
+                  className="text-[10px] font-bold text-[#2720ff] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                >
+                  <UserPlus className="w-3 h-3" />
+                  <span>+ Nouveau Patient</span>
+                </button>
+              </div>
+
+              <select
+                value={selectedPatientId ?? ""}
+                onChange={(e) => setSelectedPatientId(e.target.value ? parseInt(e.target.value, 10) : null)}
+                className={`w-full py-2 px-3 text-xs font-semibold rounded-xl border focus:outline-hidden transition-all ${
+                  paymentMethod === 'credit' && !selectedPatient
+                    ? "border-rose-300 bg-rose-50/50 text-rose-900"
+                    : "border-slate-200 bg-slate-50 text-slate-800 focus:bg-white focus:border-[#2720ff]"
+                }`}
+              >
+                <option value="">Client de passage / Anonyme</option>
+                {patients.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} {p.phone ? `(${p.phone})` : ""} {p.allergies ? "⚠️ [Allergie]" : ""}
+                  </option>
+                ))}
+              </select>
+
+              {/* Alerte Terrain Allergique */}
+              {selectedPatient?.allergies && (
+                <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2 text-rose-800 text-xs font-bold animate-in fade-in duration-200">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="block text-[10px] uppercase tracking-wider text-rose-600">Vigilance Allergique</span>
+                    <span>{selectedPatient.allergies}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Montant Total */}
             <div className="flex justify-between items-baseline bg-slate-50 p-4 rounded-2xl border border-slate-200">
               <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">
@@ -369,6 +448,18 @@ export function CartSidebar({
             </form>
           </div>
         </>
+      )}
+
+      {/* Modal d'ajout rapide de patient sans quitter le panier */}
+      {isNewPatientModalOpen && (
+        <PatientFormModal
+          isOpen={isNewPatientModalOpen}
+          onClose={() => setIsNewPatientModalOpen(false)}
+          onSuccess={() => {
+            loadPatients();
+            setIsNewPatientModalOpen(false);
+          }}
+        />
       )}
     </aside>
   );

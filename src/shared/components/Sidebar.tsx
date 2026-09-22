@@ -4,6 +4,7 @@ import {
   Package,
   Truck,
   Coins,
+  Users,
   CreditCard,
   BarChart3,
   Plus
@@ -15,6 +16,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: ShoppingBag, label: "Point of Sale", path: "/pos" },
   { icon: Coins, label: "Caisse", path: "/cash" },
+  { icon: Users, label: "Patients", path: "/patients" },
   { icon: Package, label: "Stock", path: "/stock" },
   { icon: Truck, label: "Livraisons", path: "/deliveries" },
   { icon: CreditCard, label: "Credits", path: "/credits" },
