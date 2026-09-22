@@ -8,9 +8,9 @@
 ---
 
 ## 🎯 Focus Actuel
-- **Phase active :** 🟠 PRIORITÉ HAUTE
-- **Épic en cours :** Épic 2.5 - Module Livraisons & Réceptions Fournisseurs (`/deliveries`)
-- **Objectif immédiat :** Formulaire d'enregistrement de bon de livraison (fournisseur, n° BL, date, liste articles), incrémentation automatique des stocks et création des lots FEFO correspondants, historique des prix d'achat et comparateur de tarifs.
+- **Phase active :** 🟡 PHASE 3 : PRIORITÉ MOYENNE
+- **Épic en cours :** Épic 3.1 - Module Rapports & Statistiques (`/reports`)
+- **Objectif immédiat :** Page générale `/reports` avec sélecteur de période, indicateurs financiers (CA, marge brute, panier moyen, modes de paiement), graphiques de rentabilité et export des rapports (PDF / CSV).
 
 ---
 
@@ -26,7 +26,7 @@
 | 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[x] TERMINÉ` | 5 / 5 |
 | 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[x] TERMINÉ` | 5 / 5 |
 | 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[x] TERMINÉ` | 6 / 6 |
-| 🟠 **Haute** | 2.5 Module Livraisons & Réceptions Fournisseurs | `[ ] À FAIRE` | 1 / 5 |
+| 🟠 **Haute** | 2.5 Module Livraisons & Réceptions Fournisseurs | `[x] TERMINÉ` | 5 / 5 |
 | 🟡 **Moyenne** | 3.1 Module Rapports & Statistiques (`/reports`) | `[ ] À FAIRE` | 0 / 7 |
 | 🟡 **Moyenne** | 3.2 Module Stupéfiants & Psychotropes (`/narcotics`) | `[ ] À FAIRE` | 0 / 5 |
 | 🟡 **Moyenne** | 3.3 Module Paramètres & Sauvegardes (`/settings`) | `[ ] À FAIRE` | 0 / 6 |
@@ -127,10 +127,10 @@
 
 ### 🚚 Épic 2.5 : Module Livraisons & Réceptions Fournisseurs
 - [x] **2.5.1** Maquette & Tableau de bord livraisons (`DeliveriesPage.tsx`)
-- [ ] **2.5.2** Formulaire d'enregistrement de bon de livraison (fournisseur, n° BL, date, liste articles)
-- [ ] **2.5.3** Incrémentation automatique des stocks et création des lots correspondants
-- [ ] **2.5.4** Historique des prix d'achat par fournisseur
-- [ ] **2.5.5** Comparateur de tarifs entre centrales d'achat (CAME, Cephac, PCT, etc.)
+- [x] **2.5.2** Formulaire d'enregistrement de bon de livraison (fournisseur, n° BL, date, liste articles)
+- [x] **2.5.3** Incrémentation automatique des stocks et création des lots correspondants
+- [x] **2.5.4** Historique des prix d'achat par fournisseur
+- [x] **2.5.5** Comparateur de tarifs entre centrales d'achat (CAME, Cephac, PCT, etc.)
 
 ---
 

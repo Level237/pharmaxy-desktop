@@ -1,26 +1,31 @@
-export interface Delivery {
-  id: string;
-  reference: string;
-  supplierName: string;
-  supplierType: string;
-  date: string;
-  status: 'REÇU' | 'EN TRANSIT' | 'ANNULÉ' | 'EN ATTENTE';
-  amount: number;
-  itemsCount: number;
-  receivedBy?: string;
-}
+// src/features/deliveries/types.ts
+import { 
+    SupplierEntity, 
+    DeliverySummary, 
+    DeliveryDetail, 
+    DeliveryItemInput, 
+    CreateDeliveryInput, 
+    DeliveryKpis, 
+    SupplierProductPriceComparison 
+} from "../../db/deliveryQueries";
 
-export interface Supplier {
-  id: string;
-  name: string;
-  type: string;
-  totalDeliveries: number;
-  lastContact: string;
-  logo?: string;
-}
+export type {
+    SupplierEntity,
+    DeliverySummary,
+    DeliveryDetail,
+    DeliveryItemInput,
+    CreateDeliveryInput,
+    DeliveryKpis,
+    SupplierProductPriceComparison
+};
 
-export interface DeliveryStats {
-  monthlyDeliveries: number;
-  percentageChange: number;
-  totalValue: number;
+// Aliases pour compatibilité
+export type Delivery = DeliverySummary;
+export type Supplier = SupplierEntity;
+export type DeliveryStats = DeliveryKpis;
+
+export interface DeliveryFiltersState {
+    supplierId?: number;
+    search: string;
+    status: string;
 }

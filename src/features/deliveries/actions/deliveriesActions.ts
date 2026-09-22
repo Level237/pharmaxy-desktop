@@ -1,76 +1,94 @@
-import type { Delivery, DeliveryStats } from "../types";
+// src/features/deliveries/actions/deliveriesActions.ts
+import {
+    getDeliveries,
+    getDeliveryStats,
+    getSuppliers,
+    getDeliveryById,
+    createDeliveryTransaction,
+    createSupplier,
+    getPriceComparison,
+    DeliverySummary,
+    DeliveryDetail,
+    SupplierEntity,
+    DeliveryKpis,
+    CreateDeliveryInput,
+    SupplierProductPriceComparison
+} from "../../../db/deliveryQueries";
 
-const MOCK_DELIVERIES: Delivery[] = [
-  {
-    id: "1",
-    reference: "DLV-2024-001",
-    supplierName: "UNIPhar",
-    supplierType: "Grossiste National",
-    date: "Aujourd'hui, 09:45",
-    status: "REÇU",
-    amount: 12450.00,
-    itemsCount: 124,
-    receivedBy: "Jean-Marc T."
-  },
-  {
-    id: "2",
-    reference: "DLV-2024-002",
-    supplierName: "Pharmacie Centrale",
-    supplierType: "Institutionnel",
-    date: "Hier, 14:20",
-    status: "REÇU",
-    amount: 8500.50,
-    itemsCount: 89,
-    receivedBy: "Service Log."
-  },
-  {
-    id: "3",
-    reference: "DLV-2024-003",
-    supplierName: "Laborex",
-    supplierType: "Spécialiste Pharma",
-    date: "Hier",
-    status: "EN TRANSIT",
-    amount: 15200.00,
-    itemsCount: 210,
-    receivedBy: "Direct Lab"
-  },
-  {
-    id: "4",
-    reference: "DLV-2024-004",
-    supplierName: "EuroMed Supplies",
-    supplierType: "International",
-    date: "14 Oct 2023",
-    status: "REÇU",
-    amount: 6780.25,
-    itemsCount: 45,
-    receivedBy: "Service Log."
-  },
-  {
-    id: "5",
-    reference: "DLV-2024-005",
-    supplierName: "Sanofi Distribution",
-    supplierType: "Laboratoire",
-    date: "Il y a 3h",
-    status: "REÇU",
-    amount: 25400.00,
-    itemsCount: 562,
-    receivedBy: "Amélie Laurent"
-  }
-];
-
-const MOCK_STATS: DeliveryStats = {
-  monthlyDeliveries: 248,
-  percentageChange: 12,
-  totalValue: 42850.00
-};
-
-export async function fetchDeliveries(): Promise<Delivery[]> {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return MOCK_DELIVERIES;
+export async function fetchDeliveries(filters?: {
+    supplierId?: number;
+    search?: string;
+    status?: string;
+}): Promise<DeliverySummary[]> {
+    try {
+        return await getDeliveries(filters);
+    } catch (error) {
+        console.error("Erreur fetchDeliveries:", error);
+        return [];
+    }
 }
 
-export async function fetchDeliveryStats(): Promise<DeliveryStats> {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return MOCK_STATS;
+export async function fetchDeliveryStats(): Promise<DeliveryKpis> {
+    try {
+        return await getDeliveryStats();
+    } catch (error) {
+        console.error("Erreur fetchDeliveryStats:", error);
+        return {
+            monthlyDeliveriesCount: 0,
+            monthlyTotalValue: 0,
+            activeSuppliersCount: 0,
+            totalProductsSupplied: 0
+        };
+    }
+}
+
+export async function fetchSuppliers(): Promise<SupplierEntity[]> {
+    try {
+        return await getSuppliers();
+    } catch (error) {
+        console.error("Erreur fetchSuppliers:", error);
+        return [];
+    }
+}
+
+export async function fetchDeliveryDetail(id: number): Promise<DeliveryDetail | null> {
+    try {
+        return await getDeliveryById(id);
+    } catch (error) {
+        console.error("Erreur fetchDeliveryDetail:", error);
+        return null;
+    }
+}
+
+export async function createDeliveryAction(input: CreateDeliveryInput): Promise<DeliveryDetail> {
+    try {
+        return await createDeliveryTransaction(input);
+    } catch (error) {
+        console.error("Erreur createDeliveryAction:", error);
+        throw error;
+    }
+}
+
+export async function createSupplierAction(data: {
+    name: string;
+    phone?: string;
+    email?: string;
+    address?: string;
+    contactPerson?: string;
+}): Promise<SupplierEntity> {
+    try {
+        return await createSupplier(data);
+    } catch (error) {
+        console.error("Erreur createSupplierAction:", error);
+        throw error;
+    }
+}
+
+export async function fetchPriceComparisonAction(productId?: number): Promise<SupplierProductPriceComparison[]> {
+    try {
+        return await getPriceComparison(productId);
+    } catch (error) {
+        console.error("Erreur fetchPriceComparisonAction:", error);
+        return [];
+    }
 }
