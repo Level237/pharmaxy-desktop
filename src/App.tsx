@@ -9,6 +9,7 @@ import { DeliveriesPage } from "./features/deliveries";
 import { StockPage } from "./features/stock";
 import { CashPage } from "./features/cash";
 import { PatientsPage } from "./features/patients";
+import { CreditsPage } from "./features/credits";
 import { checkIfRegistered } from "./db/pharmacyQueries";
 
 import { initializeAppDatabase } from "./db/initializeDatabase";
@@ -125,6 +126,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PatientsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/credits"
+              element={
+                <ProtectedRoute>
+                  <CreditsPage />
                 </ProtectedRoute>
               }
             />

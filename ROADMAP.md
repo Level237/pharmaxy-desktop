@@ -9,8 +9,8 @@
 
 ## 🎯 Focus Actuel
 - **Phase active :** 🟠 PRIORITÉ HAUTE
-- **Épic en cours :** Épic 2.4 - Module Crédit Client (Gestion des Dettes) (`/credits`)
-- **Objectif immédiat :** Page dédiée `/credits`, enregistrement des remboursements/acomptes, calcul en temps réel de l'encours et solde débiteur, alertes créances en souffrance (> 30 jours), bordereau de dette et reçu de versement.
+- **Épic en cours :** Épic 2.5 - Module Livraisons & Réceptions Fournisseurs (`/deliveries`)
+- **Objectif immédiat :** Formulaire d'enregistrement de bon de livraison (fournisseur, n° BL, date, liste articles), incrémentation automatique des stocks et création des lots FEFO correspondants, historique des prix d'achat et comparateur de tarifs.
 
 ---
 
@@ -25,7 +25,7 @@
 | 🟠 **Haute** | 2.1 Module Stock & Inventaire (`/inventory`) | `[x] TERMINÉ` | 8 / 8 |
 | 🟠 **Haute** | 2.2 Module Caisse & Clôtures | `[x] TERMINÉ` | 5 / 5 |
 | 🟠 **Haute** | 2.3 Module Fiches Patients (`/patients`) | `[x] TERMINÉ` | 5 / 5 |
-| 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[ ] À FAIRE` | 0 / 6 |
+| 🟠 **Haute** | 2.4 Module Crédit Client & Recouvrement (`/credits`) | `[x] TERMINÉ` | 6 / 6 |
 | 🟠 **Haute** | 2.5 Module Livraisons & Réceptions Fournisseurs | `[ ] À FAIRE` | 1 / 5 |
 | 🟡 **Moyenne** | 3.1 Module Rapports & Statistiques (`/reports`) | `[ ] À FAIRE` | 0 / 7 |
 | 🟡 **Moyenne** | 3.2 Module Stupéfiants & Psychotropes (`/narcotics`) | `[ ] À FAIRE` | 0 / 5 |
@@ -116,12 +116,12 @@
 ---
 
 ### 💳 Épic 2.4 : Module Crédit Client (Gestion des Dettes)
-- [ ] **2.4.1** Page dédiée aux crédits clients (`/credits`)
-- [ ] **2.4.2** Option de paiement à crédit au POS (associé obligatoirement à une fiche patient)
-- [ ] **2.4.3** Enregistrement des remboursements (partiels ou totaux avec mode de paiement)
-- [ ] **2.4.4** Calcul en temps réel de l'encours et solde débiteur par client
-- [ ] **2.4.5** Système d'alerte pour créances en souffrance (> 30 jours)
-- [ ] **2.4.6** Impression d'un bordereau / reçu de reconnaissance de dette et reçu de versement
+- [x] **2.4.1** Page dédiée aux crédits clients (`/credits`)
+- [x] **2.4.2** Option de paiement à crédit au POS (associé obligatoirement à une fiche patient)
+- [x] **2.4.3** Enregistrement des remboursements (partiels ou totaux avec mode de paiement)
+- [x] **2.4.4** Calcul en temps réel de l'encours et solde débiteur par client
+- [x] **2.4.5** Système d'alerte pour créances en souffrance (> 30 jours)
+- [x] **2.4.6** Impression d'un bordereau / reçu de reconnaissance de dette et reçu de versement
 
 ---
 

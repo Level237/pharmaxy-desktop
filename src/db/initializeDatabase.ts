@@ -350,6 +350,29 @@ export const initializeAppDatabase = async () => {
         );
     `);
 
+    // Table 18 : debt_repayments (remboursements et acomptes de crédits clients)
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS debt_repayments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            uuid TEXT UNIQUE NOT NULL,
+            receipt_number TEXT UNIQUE NOT NULL,
+            client_id INTEGER NOT NULL,
+            sale_id INTEGER,
+            cash_session_id INTEGER,
+            user_id INTEGER NOT NULL,
+            amount INTEGER NOT NULL CHECK(amount > 0),
+            payment_method TEXT CHECK(payment_method IN ('cash', 'mobile_money', 'card', 'bank_transfer')) NOT NULL,
+            mobile_money_provider TEXT,
+            mobile_money_ref TEXT,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(client_id) REFERENCES clients(id),
+            FOREIGN KEY(sale_id) REFERENCES sales(id),
+            FOREIGN KEY(cash_session_id) REFERENCES cash_sessions(id),
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
+    `);
+
     // 3. MIGRATIONS AUTOMATIQUES (Ajout des colonnes si la base existait déjà)
     await addColumnIfNotExists(db, "sales", "receipt_number", "TEXT");
     await addColumnIfNotExists(db, "sales", "subtotal", "INTEGER DEFAULT 0");
@@ -358,6 +381,7 @@ export const initializeAppDatabase = async () => {
     await addColumnIfNotExists(db, "sales", "change_amount", "INTEGER DEFAULT 0");
     await addColumnIfNotExists(db, "sales", "notes", "TEXT");
     await addColumnIfNotExists(db, "sales", "cash_session_id", "INTEGER");
+    await addColumnIfNotExists(db, "sales", "credit_due_date", "TEXT");
 
     await addColumnIfNotExists(db, "sale_lines", "purchase_price", "INTEGER DEFAULT 0");
     await addColumnIfNotExists(db, "sale_lines", "subtotal", "INTEGER DEFAULT 0");
@@ -397,9 +421,12 @@ export const initializeAppDatabase = async () => {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_client ON sales(client_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_receipt ON sales(receipt_number);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_cash_session ON sales(cash_session_id);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_sales_status ON sales(status);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_payments_cash_session ON payments(cash_session_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_sessions_status ON cash_sessions(user_id, status);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_cash_movements_session ON cash_movements(cash_session_id);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_debt_repayments_client ON debt_repayments(client_id);`);
+    await db.execute(`CREATE INDEX IF NOT EXISTS idx_debt_repayments_session ON debt_repayments(cash_session_id);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_clients_phone ON clients(phone);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_clients_name ON clients(name);`);
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_deliveries_supplier ON deliveries(supplier_id);`);

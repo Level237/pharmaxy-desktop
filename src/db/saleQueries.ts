@@ -45,6 +45,7 @@ export interface SaleDetail {
     paid_amount: number;
     change_amount: number;
     status: string;
+    credit_due_date?: string | null;
     notes: string | null;
     created_at: string;
     lines: {
@@ -118,15 +119,18 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
         const randSuffix = Math.floor(Math.random() * 900 + 100);
         const receiptNumber = `TK-${dateStr}-${sequence.toString().padStart(4, "0")}-${randSuffix}`;
 
-        // 6. Insertion de la vente principale (statut 'completed' pour respecter les contraintes SQLite)
-        const saleStatus = 'completed';
+        // 6. Insertion de la vente principale
+        const isCredit = input.paymentMethod === 'credit';
+        const saleStatus = isCredit ? 'credit' : 'completed';
+        const creditDueDate = isCredit ? new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) : null;
+
         const saleRes = await db.execute(`
             INSERT INTO sales (
                 uuid, receipt_number, user_id, client_id,
                 subtotal, discount_amount, total_amount, paid_amount,
-                change_amount, status, notes, cash_session_id
+                change_amount, status, notes, cash_session_id, credit_due_date
             ) VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
             )
         `, [
             saleUuid,
@@ -140,7 +144,8 @@ export async function executeSaleTransaction(input: SaleTransactionInput): Promi
             changeAmount,
             saleStatus,
             input.notes || null,
-            input.cashSessionId || null
+            input.cashSessionId || null,
+            creditDueDate
         ]);
 
         const saleId = saleRes.lastInsertId ?? 0;

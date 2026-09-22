@@ -69,8 +69,16 @@ export function CartSidebar({
           return `Le montant reçu (${receivedNum.toLocaleString()} F) est inférieur au total (${totalAmount.toLocaleString()} F).`;
         }
 
-        if (paymentMethod === 'credit' && !selectedPatient) {
-          return "Pour accorder un crédit, vous devez obligatoirement sélectionner un patient enregistré.";
+        if (paymentMethod === 'credit') {
+          if (!selectedPatient) {
+            return "Pour accorder un crédit, vous devez obligatoirement sélectionner un patient enregistré.";
+          }
+          const currentDebt = selectedPatient.debt_balance || 0;
+          const maxLimit = selectedPatient.max_credit_limit || 50000;
+          const projectedDebt = currentDebt + totalAmount;
+          if (projectedDebt > maxLimit) {
+            return `Plafond de crédit dépassé pour ${selectedPatient.name}. Dette actuelle : ${currentDebt.toLocaleString()} FCFA, Plafond : ${maxLimit.toLocaleString()} FCFA. La dette totale (${projectedDebt.toLocaleString()} FCFA) dépasserait la limite autorisée.`;
+          }
         }
 
         const payload: SalePayload = {
